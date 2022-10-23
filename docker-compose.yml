@@ -1,0 +1,120 @@
+version: '3.8'
+
+
+networks:
+  agala:
+    driver: bridge
+
+services:
+  nginx:
+    build:
+      context: .docker/nginx
+      dockerfile: dockerfile
+      args:
+        - GID=${DOCKER_GID:-1000}
+        - UID=${DOCKER_UID:-1000}
+        - USER=${DOCKER_USER:-1000}
+    container_name: nginx_agala
+    restart: unless-stopped
+    depends_on:
+      - php
+      - mysql
+      - mailhog
+    image: agala/nginx
+    networks:
+      - agala
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/var/www
+      - .docker/nginx:/etc/nginx/conf.d
+
+  mysql:
+    container_name: mysql_agala
+    environment:
+      MYSQL_DATABASE: 'agala_master'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      MYSQL_ROOT_PASSWORD: ""
+    image: mysql:5.7.31
+    command: --max_allowed_packet=32505856
+    networks:
+      - agala
+    ports:
+      - "3306:3306"
+    restart: always
+    volumes:
+      - ./data/:/var/lib/mysql
+      - ./.docker/mysql/tmp:/var/tmp
+
+  php:
+    build:
+      context: .docker/php
+      dockerfile: dockerfile
+      args:
+        - GID=${DOCKER_GID:-1000}
+        - UID=${DOCKER_UID:-1000}
+        - USER=${DOCKER_USER:-1000}
+    container_name: php_agala
+    networks:
+      - agala
+    image: agala/php
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./:/var/www
+      - .docker/php/php.ini:/usr/local/etc/php/conf.d/local.ini
+
+  composer:
+    build:
+      context: .docker/composer
+      dockerfile: dockerfile
+      args:
+        - USER=${DOCKER_USER:-1000}
+    container_name: composer_agala
+    depends_on:
+      - php
+    # entrypoint: ['composer']
+    image: agala/composer
+    networks:
+      - agala
+#    tty: false
+    volumes:
+      - ./:/var/www
+      - ./.docker/php/php.ini:/usr/local/etc/php/conf.d/local.ini
+    working_dir: /var/www
+
+  npm:
+    container_name: npm_agala
+    image: node:latest
+    #entrypoint: ['npm']
+    networks:
+      - agala
+    #ports:
+    #  - "3000:3000"
+    #  - "3001:3001"
+    tty: true
+    volumes:
+      - ./:/var/www
+    working_dir: /var/www
+
+  artisan:
+    container_name: artisan_agala
+    depends_on:
+      - mysql
+      - php
+    entrypoint: [ 'php', '/var/www/artisan' ]
+    image: agala/php
+    networks:
+      - agala
+    volumes:
+      - ./:/var/www
+    working_dir: /var/www
+
+  mailhog:
+    container_name: mailhog_agala
+    image: mailhog/mailhog:latest
+    networks:
+      - agala
+    ports:
+      - "1025:1025"
+      - "8025:8025"

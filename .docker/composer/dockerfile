@@ -1,0 +1,29 @@
+FROM agala/php
+
+ARG USER
+ENV USER=${USER}
+
+# Get latest Composer
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+
+# Create system user to run Composer Commands
+RUN mkdir -p /home/${USER}/.composer && \
+    chown -R ${USER}:${USER} /home/${USER}
+
+# Setup working directory
+WORKDIR /var/www
+
+#RUN groupadd -g 1000 ${GROUP} && useradd -u 1000 -ms /bin/bash -g ${GROUP} ${USER}
+
+# Grant Permissions
+#RUN chown -R ${USER} /var/www
+
+# Select User
+USER ${USER}
+
+# Copy permission to selected user
+#COPY --chown=${USER}:${GROUP} . .
+
+COPY composer.* ./
+
+#EXPOSE 9000
