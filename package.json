@@ -10,9 +10,23 @@
         "production": "mix --production"
     },
     "devDependencies": {
+        "@babel/cli": "^7.5.5",
+        "@babel/core": "^7.5.5",
+        "@babel/preset-env": "^7.5.5",
+        "@popperjs/core": "^2.10.2",
+        "@vitejs/plugin-vue": "^3.0.1",
+        "@vue/cli-plugin-babel": "^3.9.2",
+        "@vue/cli-service": "^3.9.3",
         "axios": "^0.25",
-        "laravel-mix": "^6.0.6",
+        "babel-loader": "^8.0.6",
+        "babel-polyfill": "^6.26.0",
+        "babel-preset-vue": "^2.0.2",
+        "bootstrap": "^5.2.1",
+        "laravel-mix": "^6.0.49",
         "lodash": "^4.17.19",
-        "postcss": "^8.1.14"
+        "postcss": "^8.1.14",
+        "sass": "^1.32.11",
+        "vue": "^3.2.37",
+        "vue-loader": "^17.0.0"
     }
 }
