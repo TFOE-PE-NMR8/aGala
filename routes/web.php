@@ -17,20 +17,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/registration', [App\Http\Controllers\RegistrationController::class, 'registration'])->name('registration');
+Route::post('/register', [App\Http\Controllers\RegistrationController::class, 'register'])->name('register');
+Route::get('/registered', [App\Http\Controllers\RegistrationController::class, 'registered'])->name('registered');
 
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::group(['middleware' => ['auth']], function() {
-    Route::resource('roles', RoleController::class);
-    Route::resource('users', UserController::class);
-    Route::resource('products', ProductController::class);
-});
+
