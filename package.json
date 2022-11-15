@@ -28,5 +28,8 @@
         "sass": "^1.32.11",
         "vue": "^3.2.37",
         "vue-loader": "^17.0.0"
+    },
+    "dependencies": {
+        "vue-axios": "^3.5.2"
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Club;
 use App\Models\Guest;
 use App\Models\Registrant;
 use App\Models\Registration;
@@ -87,7 +88,8 @@ class RegistrationController extends Controller
     }
 
     public function registration(){
-        return view('registration.index');
+        $clubs = Club::all();
+        return view('registration.index', ['clubs' => $clubs]);
     }
 
     public function register(Request $request){
