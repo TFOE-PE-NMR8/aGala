@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+
+use App\Mail\UserRegistration;
 use App\Models\Guest;
 use App\Models\Registrant;
 use App\Models\Registration;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 
 class RegistrationController extends Controller
@@ -99,13 +102,13 @@ class RegistrationController extends Controller
         ]);
 
         $registrant = new Registrant();
-        $registrant->first_name = $request->get('first_name');
-        $registrant->last_name = $request->get('last_name');
-        $registrant->phone = $request->get('phone');
-        $registrant->email = $request->get('email');
-        $registrant->title = $request->get('title');
-        $registrant->club = $request->get('club');
-        $registrant->marital_status = $request->get('marital_status');
+        $registrant->first_name = trim($request->get('first_name'));
+        $registrant->last_name = trim($request->get('last_name'));
+        $registrant->phone = trim($request->get('phone'));
+        $registrant->email = trim($request->get('email'));
+        $registrant->title = trim($request->get('title'));
+        $registrant->club = trim($request->get('club'));
+        $registrant->marital_status = trim($request->get('marital_status'));
         $registrant->save();
 
         $guest[] = new Guest();
@@ -116,6 +119,10 @@ class RegistrationController extends Controller
         $registration = new Registration();
         $registration->reference_number = $reference_number;
         $registration->registrant_id = $registrant->id;
+
+        if ($last_reg) {
+            Mail::to($registrant->email)->send(new UserRegistration($registrant->email, $registrant->first_name." ".$registrant->last_name));
+        }
 
         return redirect()->route('registered')
             ->with([
