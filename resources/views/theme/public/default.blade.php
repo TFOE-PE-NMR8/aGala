@@ -26,15 +26,15 @@
 @include('theme.public.header')
 
 <main id="main" class="main">
+    <div id="app">
+        <div class="pagetitle">
+            <h1>{{  isset($page_title) ? $page_title : '' }}</h1>
+        </div><!-- End Page Title -->
 
-    <div class="pagetitle">
-        <h1>{{  isset($page_title) ? $page_title : '' }}</h1>
-    </div><!-- End Page Title -->
-
-    <section class="section">
-        @yield('content')
-    </section>
-
+        <section class="section">
+            @yield('content')
+        </section>
+    </div>
 </main><!-- End #main -->
 
 @include('theme.footer')

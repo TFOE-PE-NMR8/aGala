@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
-use App\Mail\UserRegistration;
+use App\Models\Club;
 use App\Models\Guest;
 use App\Models\Registrant;
 use App\Models\Registration;
@@ -90,7 +89,8 @@ class RegistrationController extends Controller
     }
 
     public function registration(){
-        return view('registration.index');
+        $clubs = Club::all();
+        return view('registration.index', ['clubs' => $clubs]);
     }
 
     public function register(Request $request){
@@ -119,10 +119,6 @@ class RegistrationController extends Controller
         $registration = new Registration();
         $registration->reference_number = $reference_number;
         $registration->registrant_id = $registrant->id;
-
-        if ($last_reg) {
-            Mail::to($registrant->email)->send(new UserRegistration($registrant->email, $registrant->first_name." ".$registrant->last_name));
-        }
 
         return redirect()->route('registered')
             ->with([

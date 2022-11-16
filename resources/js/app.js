@@ -6,6 +6,8 @@
 
 import './bootstrap';
 import { createApp } from 'vue';
+import axios from 'axios';
+import VueAxios from 'vue-axios';
 
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
@@ -14,9 +16,13 @@ import { createApp } from 'vue';
  */
 
 const app = createApp({});
+app.use(VueAxios, axios);
 
 import ExampleComponent from './components/ExampleComponent.vue';
+import RegistrationForm from './components/RegistrationForm';
+
 app.component('example-component', ExampleComponent);
+app.component('registration-form', RegistrationForm);
 
 /**
  * The following block of code may be used to automatically register your
