@@ -38,6 +38,9 @@ RUN apt-get update && apt-get install -y \
     libjpeg62-turbo \
     xfonts-75dpi \
     xfonts-base \
+    libmagickwand-dev \
+    && pecl install imagick \
+    && docker-php-ext-enable imagick \
     && docker-php-ext-configure gd \
     && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-install pdo_mysql \
