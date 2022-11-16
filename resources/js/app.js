@@ -15,6 +15,15 @@ import VueAxios from 'vue-axios';
  * to use in your application's views. An example is included for you.
  */
 
+axios.interceptors.response.use(function(response){
+    if(response.data){
+        if('redirect' in response.data){
+            window.location = response.data['redirect'];
+        }
+    }
+    return response;
+});
+
 const app = createApp({});
 app.use(VueAxios, axios);
 

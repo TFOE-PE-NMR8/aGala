@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,7 +19,7 @@ Route::get('/', function () {
 });
 
 Route::get('/registration', [App\Http\Controllers\RegistrationController::class, 'registration'])->name('registration');
-Route::post('/register', [App\Http\Controllers\RegistrationController::class, 'register'])->name('register');
+Route::post('/registration', [App\Http\Controllers\RegistrationController::class, 'register'])->name('register');
 Route::get('/registered', [App\Http\Controllers\RegistrationController::class, 'registered'])->name('registered');
 
 Auth::routes();

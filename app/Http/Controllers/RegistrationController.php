@@ -95,12 +95,6 @@ class RegistrationController extends Controller
 
     public function register(Request $request){
 
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required',
-            'phone' => 'required',
-        ]);
-
         $registrant = new Registrant();
         $registrant->first_name = trim($request->get('first_name'));
         $registrant->last_name = trim($request->get('last_name'));
@@ -109,27 +103,47 @@ class RegistrationController extends Controller
         $registrant->title = trim($request->get('title'));
         $registrant->club = trim($request->get('club'));
         $registrant->marital_status = trim($request->get('marital_status'));
+
         $registrant->save();
 
-        $guest[] = new Guest();
+        $guests = $request->get('guests', null);
 
-        $last_reg = Registration::query()->last();
+        if($guests){
+            foreach ($guests as $guest){
+                $g = new Guest();
+                $g->name = $guest["name"];
+                $g->relation = $guest["relation"];
+                $g->registrant_id = $registrant->id;
+                $g->save();
+            }
+        }
+
         $year_now = Carbon::now()->year;
-        $reference_number = $last_reg ? $last_reg->reference_number++ : "AG{$year_now}-0001";
+        $reference_number = "AG{$year_now}-" . rand(1000,9999);
+        while(Registration::where('reference_number', $reference_number)->count() > 0) {
+            $reference_number = "AG{$year_now}-" . rand(1000,9999);
+        }
         $registration = new Registration();
         $registration->reference_number = $reference_number;
         $registration->registrant_id = $registrant->id;
+        $registration->total_amount = (1 + count($guests)) * 500;
+        $registration->save();
 
-        return redirect()->route('registered')
-            ->with([
-                'data' => [
-                    'registrant' => $registrant,
-                    'guests' => $guest
-                ]
-            ]);
+        $request->session()->flash('data', [
+            'registrant' => $registrant
+        ]);
+
+        return response()->json(['redirect' => route('registered')]);
     }
 
     public function registered(){
-        return view('registration.registered');
+
+        $data = session()->get('data');
+
+        if(!$data){
+            return redirect(route('registration'));
+        }
+
+        return view('registration.registered')->with($data);
     }
 }

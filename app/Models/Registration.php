@@ -9,4 +9,7 @@ class Registration extends Model
 {
     use HasFactory;
 
+    public function registrant(){
+        $this->belongsTo(Registrant::class);
+    }
 }

@@ -15,4 +15,12 @@ class Registrant extends Model
         'email',
         'phone',
     ];
+
+    public function guests(){
+        $this->hasMany(Guest::class);
+    }
+
+    public function registration(){
+        $this->hasOne(Registration::class);
+    }
 }
