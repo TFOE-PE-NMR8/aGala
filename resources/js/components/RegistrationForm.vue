@@ -121,7 +121,7 @@
         <div class="card-body">
           <div class="row g-3">
             <div class="col-md-12 pt-3 text-center">
-              <button type="submit" class="btn btn-primary btn-lg px-xxl-5">Register</button>
+              <button type="submit" class="btn btn-primary btn-lg px-xxl-5 px-5">Register</button>
             </div>
           </div>
         </div>
