@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-md-6 offset-md-3 col-sm-12">
             <div class="card">
-                <div class="card-body">
+                <div class="card-body" id="capture">
                     <div class="row mt-4">
                         <div class="col-md-12">
                             <div class="text-center">
@@ -40,11 +40,9 @@
                                         @endif
                                     </div>
                                 </div>
-                                <div class="row mt-4">
-                                    <div class="col text-center">
-                                        <a href="javascript:void(0);" class="btn btn-primary">Download QR Code</a>
-                                    </div>
-                                </div>
+
+                                <registered-button></registered-button>
+
                                 <div style="border-top:1px solid #777;height:1px;margin-top: 40px;"></div>
 
                                 <div class="row mt-4 mb-4 ms-4">
@@ -81,3 +79,9 @@
         </div>
     </div>
 @endsection
+<script>
+    import RegisteredButton from "../../js/components/RegisteredButton";
+    export default {
+        components: {RegisteredButton}
+    }
+</script>
