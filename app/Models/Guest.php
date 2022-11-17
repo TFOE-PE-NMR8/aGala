@@ -10,6 +10,6 @@ class Guest extends Model
     use HasFactory;
 
     public function registrant(){
-        $this->belongsTo(Registrant::class);
+        return $this->belongsTo(Registrant::class);
     }
 }

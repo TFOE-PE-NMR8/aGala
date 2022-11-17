@@ -34,10 +34,17 @@
             </div>
             <div class="col-md-12">
               <div class="form-floating">
-                <select v-model="form.club" class="form-select" id="club" aria-label="Club">
+                <select v-model="form.club" class="form-select" id="club" aria-label="Club" @change="changeClub">
                   <option v-for="(club) in clubs" :value="club.code">{{ club.name }}</option>
+                  <option value="other">Other</option>
                 </select>
                 <label for="club">Club</label>
+              </div>
+            </div>
+            <div class="col-md-12" v-if="form.club === 'other'">
+              <div class="form-floating">
+                <input v-model="form.other_club" type="text" class="form-control" id="other_club" placeholder="Club Name" required>
+                <label for="phone">Club Name</label>
               </div>
             </div>
 
@@ -100,7 +107,7 @@
             </div>
             <div class="col-md-8">
               <div class="form-floating">
-                <input v-model="form.guests[i].name"  type="text" class="form-control" :id="'guestName'+i" placeholder="Full Name">
+                <input v-model="form.guests[i].name"  type="text" class="form-control" :id="'guestName'+i" placeholder="Full Name" required>
                 <label :for="'guestName'+i">Full Name</label>
               </div>
             </div>
@@ -132,6 +139,9 @@ export default {
         this.clubs = response.data;
       });
     },
+    changeClub: function(){
+
+    },
     addGuest: function () {
       this.form.guests = [];
       for(let i=0; i< this.guest_no; i++) {
@@ -155,7 +165,8 @@ export default {
         title: "kuya",
         club: "DFEC",
         marital_status: "married",
-        guests: []
+        guests: [],
+        other_club: ''
       },
       clubs: [],
       guest_no: 0

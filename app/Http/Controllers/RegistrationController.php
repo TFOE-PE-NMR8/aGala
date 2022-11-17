@@ -95,13 +95,18 @@ class RegistrationController extends Controller
 
     public function register(Request $request){
 
+        $club = trim($request->get('club'));
+        if($club === "other"){
+            $club = trim($request->get('other_club'));
+        }
+
         $registrant = new Registrant();
         $registrant->first_name = trim($request->get('first_name'));
         $registrant->last_name = trim($request->get('last_name'));
         $registrant->phone = trim($request->get('phone'));
         $registrant->email = trim($request->get('email'));
         $registrant->title = trim($request->get('title'));
-        $registrant->club = trim($request->get('club'));
+        $registrant->club = $club;
         $registrant->marital_status = trim($request->get('marital_status'));
 
         $registrant->save();

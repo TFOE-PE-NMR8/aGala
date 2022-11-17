@@ -21,6 +21,6 @@ class Registrant extends Model
     }
 
     public function registration(){
-        $this->hasOne(Registration::class);
+       return $this->hasOne(Registration::class);
     }
 }
