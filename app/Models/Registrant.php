@@ -17,7 +17,7 @@ class Registrant extends Model
     ];
 
     public function guests(){
-        $this->hasMany(Guest::class);
+        return $this->hasMany(Guest::class);
     }
 
     public function registration(){

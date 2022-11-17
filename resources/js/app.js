@@ -28,7 +28,7 @@ const app = createApp({});
 app.use(VueAxios, axios);
 
 import ExampleComponent from './components/ExampleComponent.vue';
-import RegistrationForm from './components/RegistrationForm';
+import RegistrationForm from './components/RegistrationForm.vue';
 
 app.component('example-component', ExampleComponent);
 app.component('registration-form', RegistrationForm);

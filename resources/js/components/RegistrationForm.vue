@@ -126,7 +126,6 @@
 <script>
 export default {
   name: 'RegistrationForm',
-  components: {},
   methods: {
     getClubs: async function () {
       await this.axios.get('/api/clubs/all').then((response) => {
