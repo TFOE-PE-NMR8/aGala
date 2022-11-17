@@ -10,6 +10,6 @@ class Registration extends Model
     use HasFactory;
 
     public function registrant(){
-        $this->belongsTo(Registrant::class);
+        return $this->belongsTo(Registrant::class, 'registrant_id')->with("guests");
     }
 }

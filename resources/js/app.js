@@ -28,10 +28,12 @@ const app = createApp({});
 app.use(VueAxios, axios);
 
 import ExampleComponent from './components/ExampleComponent.vue';
-import RegistrationForm from './components/RegistrationForm';
+import RegistrationForm from './components/RegistrationForm.vue';
+import RegistrationButton from './components/RegisteredButton.vue';
 
 app.component('example-component', ExampleComponent);
 app.component('registration-form', RegistrationForm);
+app.component('registered-button', RegistrationButton);
 
 /**
  * The following block of code may be used to automatically register your

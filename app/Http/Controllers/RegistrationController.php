@@ -105,6 +105,7 @@ class RegistrationController extends Controller
         $registrant->marital_status = trim($request->get('marital_status'));
 
         $registrant->save();
+        $registrant_id = $registrant->id;
 
         $guests = $request->get('guests', null);
 
@@ -113,7 +114,7 @@ class RegistrationController extends Controller
                 $g = new Guest();
                 $g->name = $guest["name"];
                 $g->relation = $guest["relation"];
-                $g->registrant_id = $registrant->id;
+                $g->registrant_id = $registrant_id;
                 $g->save();
             }
         }
@@ -125,25 +126,19 @@ class RegistrationController extends Controller
         }
         $registration = new Registration();
         $registration->reference_number = $reference_number;
-        $registration->registrant_id = $registrant->id;
+        $registration->registrant_id = $registrant_id;
         $registration->total_amount = (1 + count($guests)) * 500;
         $registration->save();
 
-        $request->session()->flash('data', [
-            'registrant' => $registrant
-        ]);
-
-        return response()->json(['redirect' => route('registered')]);
+        return response()->json(['redirect' => route('registered', ['reference_number' => $reference_number])]);
     }
 
-    public function registered(){
-
-        $data = session()->get('data');
-
-        if(!$data){
+    public function registered($reference_number){
+        $data = Registration::where('reference_number', $reference_number)->with('registrant')->first();
+        if(!$reference_number || !$data){
             return redirect(route('registration'));
         }
 
-        return view('registration.registered')->with($data);
+        return view('registration.registered')->with('data', $data);
     }
 }

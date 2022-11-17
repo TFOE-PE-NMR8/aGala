@@ -20,7 +20,7 @@ Route::get('/', function () {
 
 Route::get('/registration', [App\Http\Controllers\RegistrationController::class, 'registration'])->name('registration');
 Route::post('/registration', [App\Http\Controllers\RegistrationController::class, 'register'])->name('register');
-Route::get('/registered', [App\Http\Controllers\RegistrationController::class, 'registered'])->name('registered');
+Route::get('/registered/{reference_number}', [App\Http\Controllers\RegistrationController::class, 'registered'])->name('registered');
 
 Auth::routes();
 
