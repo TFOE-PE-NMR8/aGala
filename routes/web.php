@@ -24,6 +24,9 @@ Route::get('/registered/{reference_number}', [App\Http\Controllers\RegistrationC
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::group(['middleware' => 'auth'], function(){
+    Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/registrants', [App\Http\Controllers\RegistrantController::class, 'index'])->name('registrants');
+});
 
 

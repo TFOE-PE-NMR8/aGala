@@ -23365,7 +23365,7 @@ var _hoisted_60 = {
 };
 var _hoisted_61 = ["onUpdate:modelValue", "id"];
 var _hoisted_62 = ["for"];
-var _hoisted_63 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"col-lg-12\"><div class=\"card\"><div class=\"card-body\"><div class=\"row g-3\"><div class=\"col-md-12 pt-3 text-center\"><button type=\"submit\" class=\"btn btn-primary btn-lg px-xxl-5\">Register</button></div></div></div></div></div>", 1);
+var _hoisted_63 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"col-lg-12\"><div class=\"card\"><div class=\"card-body\"><div class=\"row g-3\"><div class=\"col-md-12 pt-3 text-center\"><button type=\"submit\" class=\"btn btn-primary btn-lg px-xxl-5 px-5\">Register</button></div></div></div></div></div>", 1);
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("form", {
     "class": "row",

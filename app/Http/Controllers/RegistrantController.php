@@ -14,7 +14,7 @@ class RegistrantController extends Controller
      */
     public function index()
     {
-        //
+        return view('backend.registrant.index');
     }
 
     /**
