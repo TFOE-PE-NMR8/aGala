@@ -30,11 +30,12 @@ app.use(VueAxios, axios);
 import ExampleComponent from './components/ExampleComponent.vue';
 import RegistrationForm from './components/RegistrationForm.vue';
 import RegistrationButton from './components/RegisteredButton.vue';
+import RegistrantsTable from "./components/registrants/RegistrantsTable.vue";
 
 app.component('example-component', ExampleComponent);
 app.component('registration-form', RegistrationForm);
 app.component('registered-button', RegistrationButton);
-
+app.component('registrants-table', RegistrantsTable)
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue

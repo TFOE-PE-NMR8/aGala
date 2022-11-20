@@ -22,4 +22,10 @@ Route::group(['prefix' => 'clubs'], function(){
     Route::get('/all', [App\Http\Controllers\ClubController::class, 'getAll']);
 });
 
+Route::group(['prefix' => 'registrants'], function(){
+    Route::group(['prefix' => 'datatable'], function(){
+        Route::get('/', [\App\Http\Controllers\RegistrantController::class, 'getRegistrantsDataTable'])->name('api.registrants.datatable');
+    });
+});
+
 

@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\RegistrantResource;
 use App\Models\Registrant;
 use Illuminate\Http\Request;
+use JamesDordoy\LaravelVueDatatable\Http\Resources\DataTableCollectionResource;
 
 class RegistrantController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
-        return view('backend.registrant.index');
+        return view('backend.registrants.index');
     }
 
     /**
@@ -81,5 +79,22 @@ class RegistrantController extends Controller
     public function destroy(Registrant $registrant)
     {
         //
+    }
+
+    //API FUNCTIONS
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getRegistrantsDataTable(Request $request){
+        $length = $request->input('length');
+        $sortBy = $request->input('column');
+        $orderBy = $request->input('dir');
+        $searchValue = $request->input('search');
+
+        $data = Registrant::paginate($length);
+
+        return response()->json($data);
     }
 }
