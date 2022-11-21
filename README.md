@@ -29,6 +29,13 @@ composer install
 ```
 
 
+## Setup/update Database
+on `php_agala` container terminal
+```shell
+php artisan migrate
+```
+
+
 ## Seed Database
 on `php_agala` container terminal
 ```shell

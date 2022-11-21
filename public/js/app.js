@@ -23228,7 +23228,7 @@ var _hoisted_2 = {
 };
 var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
   href: "javascript:void(0);",
-  "class": "btn btn-primary me-4"
+  "class": "btn btn-primary me-md-4"
 }, "Download QR Code", -1 /* HOISTED */);
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -23237,7 +23237,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[0] || (_cache[0] = function () {
       return $options.downloadReceipt && $options.downloadReceipt.apply($options, arguments);
     }),
-    "class": "btn btn-primary ms-4"
+    "class": "btn btn-primary ms-md-4 mt-sm-2"
   }, "Download Receipt")])], 512 /* NEED_PATCH */)), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, !$data.hideDiv]]);
 }
 
