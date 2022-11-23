@@ -1,8 +1,8 @@
 <template>
-    <div class="row mt-4" v-show="!hideDiv">
+    <div class="row mt-4" v-if="showDiv">
         <div class="col text-center">
-            <a href="javascript:void(0);" class="btn btn-primary me-md-4">Download QR Code</a>
-            <a href="javascript:void(0);" @click="downloadReceipt" class="btn btn-primary ms-md-4 mt-sm-4">Download Receipt</a>
+            <a href="javascript:void(0);" class="btn btn-primary me-lg-4 mb-2">Download QR Code</a>
+            <a href="javascript:void(0);" @click="downloadReceipt" class="btn btn-primary ms-lg-4 mb-2">Download Receipt</a>
         </div>
     </div>
 </template>
@@ -22,15 +22,17 @@ export default {
                 jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
             };
 
-            this.hideDiv = true;
-            var element = document.getElementById('capture');
-            html2pdf().set(opt).from(element).save();
-            this.hideDiv = false;
+            this.showDiv = false;
+            setTimeout(function () {
+                var element = document.getElementById('capture');
+                html2pdf().set(opt).from(element).save();
+            }, 1500)
+            this.showDiv = true;
         },
     },
     data(){
         return {
-            hideDiv: false
+            showDiv: true
         }
     },
     mounted() {

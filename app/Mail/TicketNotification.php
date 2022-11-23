@@ -8,23 +8,24 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
-class UserRegistration extends Mailable
+class TicketNotification extends Mailable
 {
     use Queueable, SerializesModels;
-    public $email;
-    public $fullName;
+    public $data;
+    public $subjectMsg;
+    public $msg;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($email, $fullName)
+    public function __construct($registration, $subject, $msg)
     {
-        $this->email = $email;
-        $this->fullName = $fullName;
+        $this->data = $registration;
+        $this->subjectMsg = $subject;
+        $this->msg = $msg;
     }
 
     /**
@@ -35,8 +36,8 @@ class UserRegistration extends Mailable
     public function build()
     {
         return $this
-            ->subject('Thank you for registering to aGala')
-            ->markdown('emails.userRegistration');
+            ->subject($this->subjectMsg)
+            ->markdown('emails.ticketNotification');
     }
 
     /**
@@ -47,7 +48,7 @@ class UserRegistration extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'User Registration',
+            subject: 'Ticket Notification',
         );
     }
 
@@ -59,7 +60,7 @@ class UserRegistration extends Mailable
     public function content()
     {
         return new Content(
-            markdown: 'emails.userRegistration',
+            view: 'emails.ticketNotification',
         );
     }
 

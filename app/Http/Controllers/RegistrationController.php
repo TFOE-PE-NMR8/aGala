@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\TicketNotification;
 use App\Models\Club;
 use App\Models\Guest;
 use App\Models\Registrant;
@@ -137,6 +138,11 @@ class RegistrationController extends Controller
         $registration->quantity = $quantity;
         $registration->total_amount = $quantity * 500;
         $registration->save();
+
+
+        $subjectMsg = "Thank you for registering to the aGala";
+        $msg = "Please pay the amount through our selected payment options";
+        Mail::to($registrant->email)->send(new TicketNotification($registration, $subjectMsg, $msg));
 
         return response()->json(['redirect' => route('registered', ['reference_number' => $reference_number])]);
     }
