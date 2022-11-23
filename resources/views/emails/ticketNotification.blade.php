@@ -446,7 +446,7 @@
                         <h5 style="margin-top: 15px; text-align: center;">{{ $data->quantity }}</h5>
                     </td>
                     <td valign="top">
-                        <h5 style="font-size: 14px; color:#444;text-align: center"><b>P{{ $data->price }}</b></h5>
+                        <h5 style="font-size: 14px; color:#444;text-align: center"><b>P{{ $price }}</b></h5>
                     </td>
                 </tr>
                 <tr>

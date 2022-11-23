@@ -15,6 +15,7 @@ class TicketNotification extends Mailable
     public $data;
     public $subjectMsg;
     public $msg;
+    public $price;
 
     /**
      * Create a new message instance.
@@ -26,6 +27,7 @@ class TicketNotification extends Mailable
         $this->data = $registration;
         $this->subjectMsg = $subject;
         $this->msg = $msg;
+        $this->price = 500;
     }
 
     /**
