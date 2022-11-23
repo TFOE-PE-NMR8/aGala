@@ -1,46 +1,100 @@
 <template>
-  <div>testtest</div>
+
+   
+
+    <div className="card">
+        <div className="card-body">
+
+            <!-- Table with stripped rows -->
+            <table className="table table-striped" id="data-table">
+                <thead>
+                  <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Phone</th>
+                      <th scope="col">Email</th>
+                      <th scope="col">Club</th>
+                      <th scope="col">Options</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  <tr v-for="item in items">
+                      {{item}}
+                  </tr>
+               
+                </tbody>
+            </table>
+            <!-- End Table with stripped rows -->
+
+        </div>
+    </div>
+
+
+                
+
+
 </template>
 
 <script>
+import {DataTable} from "simple-datatables"
+
 export default {
-  props: {
-    url: String,
-  },
-  data() {
-    return {
-      columns: [
-        {
-          label: 'First Name',
-          name: 'first_name',
-          orderable: true,
+    props: {
+        url: String,
+    },
+    data() {
+        return {
+            headers: [
+                {
+                    text: 'First Name',
+                    value: 'first_name',
+                    sortable: true,
+                },
+                {
+                    text: 'Last Name',
+                    value: 'last_name',
+                    sortable: true,
+                },
+                {
+                    text: 'Phone',
+                    value: 'phone',
+                    // sortable: true,
+                },
+                {
+                    text: 'Email',
+                    value: 'email',
+                    sortable: true,
+                },
+                {
+                    text: 'Club',
+                    value: 'club',
+                    sortable: true,
+                },
+            ],
+            items: []
+        }
+    },
+    mounted() {
+        console.log(this.url);
+        this.getRegistrants();
+        this.initTable();
+    },
+    methods: {
+        getRegistrants() {
+            axios.get("/api/registrants/datatable", {})
+                .then(response => {
+                    this.items = response.data.data
+                    console.log(response.data.data)
+                })
+                .catch(error => {
+                    console.log(error)
+                });
         },
-        {
-          label: 'Last Name',
-          name: 'last_name',
-          orderable: true,
-        },
-        {
-          label: 'Phone',
-          name: 'phone',
-          orderable: true,
-        },
-        {
-          label: 'Email',
-          name: 'email',
-          orderable: true,
-        },
-        {
-          label: 'Club',
-          name: 'club',
-          orderable: true,
-        },
-      ],
+        initTable() {
+            new DataTable("#data-table");
+        }
     }
-  },
-  mounted(){
-    console.log(this.url);
-  }
 }
 </script>
 
