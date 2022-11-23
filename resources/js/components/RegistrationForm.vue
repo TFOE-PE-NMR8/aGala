@@ -28,7 +28,7 @@
             </div>
             <div class="col-md-6">
               <div class="form-floating">
-                <input v-model="form.phone" type="text" class="form-control" id="phone" placeholder="Mobile #" required>
+                <input v-model="form.phone" type="tel" class="form-control" id="phone" placeholder="Mobile #" v-mask="'09#########'" required>
                 <label for="phone">Mobile #</label>
               </div>
             </div>
@@ -131,8 +131,10 @@
 </template>
 
 <script>
+import {mask} from 'vue-the-mask'
 export default {
   name: 'RegistrationForm',
+  directives: {mask},
   methods: {
     getClubs: async function () {
       await this.axios.get('/api/clubs/all').then((response) => {
