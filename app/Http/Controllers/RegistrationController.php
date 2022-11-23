@@ -129,10 +129,13 @@ class RegistrationController extends Controller
         while(Registration::where('reference_number', $reference_number)->count() > 0) {
             $reference_number = "AG{$year_now}-" . rand(1000,9999);
         }
+
+        $quantity = 1 + count($guests);
         $registration = new Registration();
         $registration->reference_number = $reference_number;
         $registration->registrant_id = $registrant_id;
-        $registration->total_amount = (1 + count($guests)) * 500;
+        $registration->quantity = $quantity;
+        $registration->total_amount = $quantity * 500;
         $registration->save();
 
         return response()->json(['redirect' => route('registered', ['reference_number' => $reference_number])]);
