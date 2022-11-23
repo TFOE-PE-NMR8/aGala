@@ -8,6 +8,7 @@ import './bootstrap';
 import { createApp } from 'vue';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
+import VuejsSimpleDatatable from "vuejs-simple-datatable";
 
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
@@ -26,6 +27,7 @@ axios.interceptors.response.use(function(response){
 
 const app = createApp({});
 app.use(VueAxios, axios);
+app.use(VuejsSimpleDatatable);
 
 import ExampleComponent from './components/ExampleComponent.vue';
 import RegistrationForm from './components/RegistrationForm.vue';
