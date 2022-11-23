@@ -31,6 +31,7 @@
     },
     "dependencies": {
         "html2pdf.js": "^0.10.1",
-        "vue-axios": "^3.5.2"
+        "vue-axios": "^3.5.2",
+        "vue-the-mask": "^0.11.1"
     }
 }

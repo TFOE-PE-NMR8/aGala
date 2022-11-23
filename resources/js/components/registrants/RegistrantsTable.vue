@@ -52,7 +52,6 @@
 
 <script>
 export default {
-  name: "RegistrantsTable",
   props: {
     url: String,
   },

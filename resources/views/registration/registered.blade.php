@@ -18,10 +18,10 @@
                                 </div>
 
                                 <div class="row mt-5">
-                                    <div class="col-md-6 text-end">
+                                    <div class="col-md-6 text-md-end col-sm-12 text-sm-center">
                                         <img src="data:image/png;base64, {!! base64_encode(QrCode::errorCorrection('H')->format('png')->merge('theme/img/eagles-logo.png', .4, true)->size(200)->generate('https://www.youtube.com/watch?v=dQw4w9WgXcQ')) !!}" />
                                     </div>
-                                    <div class="col-md-6 text-start">
+                                    <div class="col-md-6 text-md-start col-sm-12 text-sm-center">
                                         <span class="fw-bolder">{{ ucfirst($data->registrant->title) }} {{ ucfirst($data->registrant->first_name) }} {{ ucfirst($data->registrant->last_name) }}</span>
                                         <br>
                                         <span>{{ $data->registrant->club }}</span>
@@ -29,7 +29,7 @@
                                         @if ($data->registrant->guests)
                                         <p class="mt-3">
                                             <span class="fw-bold">Guests</span>:
-                                            <ul>
+                                            <ul class="list-unstyled">
                                                 @foreach ($data->registrant->guests as $guest)
                                                     <li>{{ ucfirst($guest->name) }} - {{ ucfirst($guest->relation) }}</li>
                                                 @endforeach
@@ -46,14 +46,14 @@
                                 <div style="border-top:1px solid #777;height:1px;margin-top: 40px;"></div>
 
                                 <div class="row mt-4 mb-4 ms-4">
-                                    <div class="col text-start">
+                                    <div class="col text-md-start text-sm-center">
                                         <h4 class="fw-bold">How to Pay?</h4>
                                     </div>
                                     <div class="row mt-4">
                                         <div class="col-md-4">
                                             <img src="{{ asset('theme/img/gcash-logo.png') }}" width="200">
                                         </div>
-                                        <div class="col-md-8 text-start mt-2">
+                                        <div class="col-md-8 text-md-start text-sm-center mt-2">
                                             <span class="fw-bolder">Kuya Kier</span>
                                             <br>
                                             <span>09350000000</span>
@@ -64,7 +64,7 @@
                                         <div class="col-md-4">
                                             <img src="{{ asset('theme/img/palawan-express.png') }}" width="200">
                                         </div>
-                                        <div class="col-md-8 text-start">
+                                        <div class="col-md-8 text-md-start text-sm-center">
                                             <span class="fw-bolder">Angelo Rebollos</span>
                                             <br>
                                             <span>09350000000</span>
