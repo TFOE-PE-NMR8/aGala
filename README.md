@@ -12,6 +12,37 @@ Nothing Fancy
   - docker compose up -d --build
 
 
+## Install NPM Packages
+on `npm_agala` container terminal
+```shell
+bash
+su node
+npm install
+```
+
+
+## Install Composer Packages
+on `composer_agala` container terminal
+```shell
+bash
+composer install
+```
+
+
+## Setup/update Database
+on `php_agala` container terminal
+```shell
+php artisan migrate
+```
+
+
+## Seed Database
+on `php_agala` container terminal
+```shell
+php artisan db:seed
+```
+
+
 
 ## License
 

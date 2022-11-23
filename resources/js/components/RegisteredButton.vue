@@ -1,8 +1,8 @@
 <template>
     <div class="row mt-4" v-show="!hideDiv">
         <div class="col text-center">
-            <a href="javascript:void(0);" class="btn btn-primary me-4">Download QR Code</a>
-            <a href="javascript:void(0);" @click="downloadReceipt" class="btn btn-primary ms-4">Download Receipt</a>
+            <a href="javascript:void(0);" class="btn btn-primary me-md-4">Download QR Code</a>
+            <a href="javascript:void(0);" @click="downloadReceipt" class="btn btn-primary ms-md-4 mt-sm-4">Download Receipt</a>
         </div>
     </div>
 </template>
