@@ -18,10 +18,10 @@
                                 </div>
 
                                 <div class="row mt-5">
-                                    <div class="col-md-6 text-md-end col-sm-12 text-sm-center">
+                                    <div class="col-lg-6 text-lg-end col-sm-12 text-sm-center">
                                         <img src="data:image/png;base64, {!! base64_encode(QrCode::errorCorrection('H')->format('png')->merge('theme/img/eagles-logo.png', .4, true)->size(200)->generate('https://www.youtube.com/watch?v=dQw4w9WgXcQ')) !!}" />
                                     </div>
-                                    <div class="col-md-6 text-md-start col-sm-12 text-sm-center">
+                                    <div class="col-lg-6 text-lg-start col-sm-12 text-sm-center">
                                         <span class="fw-bolder">{{ ucfirst($data->registrant->title) }} {{ ucfirst($data->registrant->first_name) }} {{ ucfirst($data->registrant->last_name) }}</span>
                                         <br>
                                         <span>{{ $data->registrant->club }}</span>
