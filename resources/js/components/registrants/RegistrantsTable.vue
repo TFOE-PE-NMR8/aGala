@@ -26,7 +26,7 @@
                 </tbody>
             </table>
             <!-- End Table with stripped rows -->
-        <button @click="TestPay">Pay</button>
+
         </div>
     </div>
 
@@ -81,14 +81,6 @@ export default {
         this.initTable();
     },
     methods: {
-        async TestPay() {
-          var pay = await this.axios.post("/api/registration/pay", {
-            'registration_id': 2,
-            'amount': 500,
-            'payment_method': 'gcash'
-          });
-          console.log(pay);
-        },
         getRegistrants() {
             axios.get("/api/registrants/datatable", {})
                 .then(response => {

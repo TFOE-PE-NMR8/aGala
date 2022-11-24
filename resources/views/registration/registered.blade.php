@@ -27,7 +27,7 @@
                                         <br>
                                         <span>{{ $data->registrant->club }}</span>
                                         @if ($data->registrant->guests->count() > 0)
-                                        <p class="mt-3">
+                                        <div class="mt-3">
                                             <span class="fw-bold">Guests</span>:
                                             <ol class="list">
                                                 @foreach ($data->registrant->guests as $guest)
