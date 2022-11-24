@@ -18,17 +18,16 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::group(['prefix' => 'clubs'], function(){
+    Route::get('/all', [App\Http\Controllers\ClubController::class, 'getAll']);
+});
+
 Route::group(['middleware' => 'auth'], function(){
-    Route::group(['prefix' => 'clubs'], function(){
-        Route::get('/all', [App\Http\Controllers\ClubController::class, 'getAll']);
-    });
 
     Route::group(['prefix' => 'registrants'], function(){
         Route::group(['prefix' => 'datatable'], function(){
             Route::get('/', [\App\Http\Controllers\RegistrantController::class, 'getRegistrantsDataTable'])->name('api.registrants.datatable');
-    });
-
-
+        });
     });
 
     //POST URL: api/registration/pay
