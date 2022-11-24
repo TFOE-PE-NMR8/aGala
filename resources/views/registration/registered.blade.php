@@ -36,6 +36,9 @@
                                             </ol>
                                         </p>
                                         @endif
+                                        <div class="mt-5">
+                                            Total amount to pay: <strong>PHP {{$data->total_amount}}</strong>
+                                        </div>
                                     </div>
                                 </div>
 

@@ -24,10 +24,13 @@ class TicketNotification extends Mailable
      */
     public function __construct($registration, $subject, $msg)
     {
+        $registration->load([
+           'registrant',
+           'registrant.guests'
+        ]);
         $this->data = $registration;
         $this->subjectMsg = $subject;
         $this->msg = $msg;
-        $this->price = 500;
     }
 
     /**
@@ -39,7 +42,7 @@ class TicketNotification extends Mailable
     {
         return $this
             ->subject($this->subjectMsg)
-            ->markdown('emails.ticketNotification');
+            ->markdown('emails.registration.registered');
     }
 
     /**
@@ -50,7 +53,7 @@ class TicketNotification extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'Ticket Notification',
+            subject: 'Registration Receipt',
         );
     }
 
@@ -62,7 +65,7 @@ class TicketNotification extends Mailable
     public function content()
     {
         return new Content(
-            view: 'emails.ticketNotification',
+            view: 'emails.registration.registered',
         );
     }
 

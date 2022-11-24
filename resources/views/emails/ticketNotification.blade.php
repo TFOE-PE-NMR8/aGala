@@ -478,7 +478,7 @@
                             <tbody>
                             <tr>
                                 <td>
-                                    <p style="font-size:14px; margin:8px 0; color:#aba8a8;">&copy; 2022 aGala powered by DevBro Solutions team</p>
+                                    <p style="font-size:14px; margin:8px 0; color:#aba8a8;">&copy; 2022 aGala powered by DevBro Solutions PH team</p>
                                 </td>
                             </tr>
                             </tbody>

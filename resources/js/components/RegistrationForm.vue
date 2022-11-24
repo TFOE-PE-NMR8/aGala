@@ -64,6 +64,8 @@
                 <select v-model="form.marital_status" class="form-select" id="marital_status" aria-label="Title">
                   <option value="married" selected>Married</option>
                   <option value="single">Single</option>
+                  <option value="widow">Widow</option>
+                  <option value="widower">Widower</option>
                 </select>
                 <label for="title">Marital Status</label>
               </div>
