@@ -44,7 +44,7 @@
                                     </div>
                                 </div>
 
-                                <registered-button></registered-button>
+                                <registered-button registration_id="{{$data->id}}"></registered-button>
 
                                 <div class="row border-top pt-4 mt-3">
                                     <div class="col-md-12 mb-2">
