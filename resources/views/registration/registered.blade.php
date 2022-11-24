@@ -46,7 +46,7 @@
 
                                 <registered-button registration_id="{{$data->id}}"></registered-button>
 
-                                <div class="row border-top pt-4 mt-3">
+                                <div class="row border-top pt-4 mt-3 page-break-avoid">
                                     <div class="col-md-12 mb-2">
                                         <h4>Where to Pay?</h4>
                                     </div>
@@ -73,7 +73,7 @@
                                     </div>
                                 </div>
 
-                                 <div class="row pt-4 mt-3 border-top">
+                                 <div class="row pt-4 mt-3 border-top page-break-avoid">
                                      <div class="col-md-12 mb-2 mb-4">
                                          <h4>Next Step, How to Pay?</h4>
                                      </div>

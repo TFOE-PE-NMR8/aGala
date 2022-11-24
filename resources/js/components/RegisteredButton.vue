@@ -21,7 +21,8 @@ export default {
                 margin:       0.5,
                 filename:     'agala-registration-receipt.pdf',
                 image:        { type: 'jpeg', quality: 1 },
-                html2canvas:  { scale: 1 },
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'], avoid: '.page-break-avoid' },
+                html2canvas:  { scale: 1,  windowWidth: 1366 },
                 jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
             };
 
