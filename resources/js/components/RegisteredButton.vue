@@ -1,7 +1,7 @@
 <template>
     <div class="row mt-4" v-if="showDiv" data-html2canvas-ignore="true">
         <div class="col-md-12 text-center" >
-            <a href="/registered/{{id}}/dlqr" class="btn btn-lg btn-primary me-lg-4 mb-2">Download QR Code</a>
+            <a :href="'/registered/'+registration_id+'/dlqr'" class="btn btn-lg btn-primary me-lg-4 mb-2">Download QR Code</a>
             <a href="javascript:void(0);" @click="downloadReceipt" class="btn btn-lg btn-primary ms-lg-4 mb-2">Download PDF</a>
         </div>
     </div>
