@@ -18,10 +18,12 @@
                                     <p>Please save the QR code. It will serve as e-ticket in the Gala event.</p>
                                 </div>
 
+                                <h4>Reference #: {{ $data->reference_number }}</h4>
+
                                 <div class="row mt-5">
                                     <div class="col-lg-6 text-lg-end col-sm-12 text-sm-center mb-2">
-                                        <img src="data:image/png;base64, {!! base64_encode(QrCode::errorCorrection('H')->format('png')->merge('theme/img/eagles-logo.png', .4, true)->size(200)->generate('https://www.youtube.com/watch?v=dQw4w9WgXcQ')) !!}" />
-                                    </div>
+                                        <img src="data:image/png;base64, {!! base64_encode(QrCode::errorCorrection('H')->format('png')->merge('theme/img/eagles-logo.png', .4, true)->size(200)->generate($data->reference_number)) !!}" />
+                                   </div>
                                     <div class="col-lg-6 text-lg-start col-sm-12 text-sm-center mb-2">
                                         <span class="fw-bolder">{{ ucfirst($data->registrant->title) }} {{ ucfirst($data->registrant->first_name) }} {{ ucfirst($data->registrant->last_name) }}</span>
                                         <br>
