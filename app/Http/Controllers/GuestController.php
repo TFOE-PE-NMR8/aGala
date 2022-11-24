@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Guest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class GuestController extends Controller
 {
@@ -14,7 +15,7 @@ class GuestController extends Controller
      */
     public function index()
     {
-        //
+        return view('backend.guests.index');
     }
 
     /**
@@ -81,5 +82,24 @@ class GuestController extends Controller
     public function destroy(Guest $guest)
     {
         //
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getGuestsDataTable(Request $request){
+
+        $query = DB::table('guests');
+        $registrant_id = $request->get('registrant', null);
+        $length = $request->get('length', 15);
+
+        if($registrant_id){
+            $query->where('registrant_id', $registrant_id);
+        }
+
+        $data = $query->paginate($length);
+
+        return response()->json($data);
     }
 }

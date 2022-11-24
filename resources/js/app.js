@@ -16,6 +16,18 @@ import VuejsSimpleDatatable from "vuejs-simple-datatable";
  * to use in your application's views. An example is included for you.
  */
 
+axios.interceptors.request.use(
+    function(config) {
+        // Do something before request is sent
+        config.withCredentials = true;
+        return config;
+    },
+    function(error) {
+        // Do something with request error
+        return Promise.reject(error);
+    }
+);
+
 axios.interceptors.response.use(function(response){
     if(response.data){
         if('redirect' in response.data){
@@ -23,7 +35,19 @@ axios.interceptors.response.use(function(response){
         }
     }
     return response;
-});
+}, async err => {
+    const status = get(err, 'response.status')
+
+    if (status === 419) {
+        // Refresh our session token
+        await axios.get('/sanctum/csrf-cookie')
+
+        // Return a new request using the original request's configuration
+        return axios(err.response.config)
+    }
+
+    return Promise.reject(err)
+})
 
 const app = createApp({});
 app.use(VueAxios, axios);
@@ -33,11 +57,13 @@ import ExampleComponent from './components/ExampleComponent.vue';
 import RegistrationForm from './components/RegistrationForm.vue';
 import RegistrationButton from './components/RegisteredButton.vue';
 import RegistrantsTable from "./components/registrants/RegistrantsTable.vue";
+import GuestsTable from "./components/guests/GuestsTable.vue";
 
 app.component('example-component', ExampleComponent);
 app.component('registration-form', RegistrationForm);
 app.component('registered-button', RegistrationButton);
 app.component('registrants-table', RegistrantsTable)
+app.component('guests-table', GuestsTable)
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue

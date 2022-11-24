@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Club;
 use App\Models\Guest;
+use App\Models\PaymentLog;
 use App\Models\Registrant;
 use App\Models\Registration;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 
@@ -148,5 +150,35 @@ class RegistrationController extends Controller
         }
 
         return view('registration.registered')->with('data', $data);
+    }
+
+    public function pay(Request $request){
+
+        $amount = floatval($request->get('amount', 0));
+        $registration_id = $request->get('registration_id');
+        $payment_method = $request->get('payment_method');
+        $date = Carbon::now();
+
+        $user = Auth::user();
+
+        if(!$user){
+            return response()->json(['redirect' => route('login')]);
+        }
+
+        $user_id = $user->id;
+
+        $registration = Registration::find($registration_id);
+        $registration->paid_amount = floatval($registration->paid_amount) + $amount;
+        $registration->save();
+
+        $payment = PaymentLog::create([
+            'paid_user_id' => $user_id,
+            'registration_id' => $registration_id,
+            'amount' => $amount,
+            'payment_method' => $payment_method,
+            'date' => $date
+        ]);
+
+        return response()->json($payment, 200);
     }
 }
