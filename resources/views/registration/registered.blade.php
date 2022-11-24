@@ -36,9 +36,9 @@
                                                     <li>{{ ucfirst($guest->relation) }} {{ ucfirst($guest->name) }}</li>
                                                 @endforeach
                                             </ol>
-                                        </p>
+                                        </div>
                                         @endif
-                                        <div class="mt-5">
+                                        <div class="mt-3">
                                             Total amount to pay: <strong>PHP {{$data->total_amount}}</strong>
                                         </div>
                                     </div>
