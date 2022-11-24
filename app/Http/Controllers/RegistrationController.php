@@ -193,6 +193,13 @@ class RegistrationController extends Controller
         $registration = Registration::find($registration_id);
         $image = base64_encode(QrCode::errorCorrection('H')->format('png')->merge('theme/img/eagles-logo.png', .4, true)->size(200)->generate($registration->reference_number));
         $raw_image_string = base64_decode($image);
-        return response($raw_image_string)->header('Content-Type', 'image/png');
+        $filename = "agala_qr_code_{$registration->id}.png";
+        $headers = [
+            'Content-Type' => 'image/png',
+            'Content-Disposition' => 'attachment; filename='. $filename,
+        ];
+        return response()->stream(function() use ($raw_image_string) {
+            echo $raw_image_string;
+        }, 200, $headers);
     }
 }
