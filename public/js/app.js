@@ -24175,7 +24175,7 @@ __webpack_require__.r(__webpack_exports__);
     downloadReceipt: function downloadReceipt() {
       var opt = {
         margin: 0.5,
-        filename: 'receipt.pdf',
+        filename: 'agala-registration-receipt.pdf',
         image: {
           type: 'jpeg',
           quality: 1
@@ -24192,6 +24192,7 @@ __webpack_require__.r(__webpack_exports__);
       this.showDiv = false;
       setTimeout(function () {
         var element = document.getElementById('capture');
+        var buttons = document.getElementById('registeredButtons');
         html2pdf_js__WEBPACK_IMPORTED_MODULE_0___default()().set(opt).from(element).save();
       }, 1500);
       this.showDiv = true;
@@ -24456,14 +24457,15 @@ __webpack_require__.r(__webpack_exports__);
 
 var _hoisted_1 = {
   key: 0,
-  "class": "row mt-4"
+  "class": "row mt-4",
+  "data-html2canvas-ignore": "true"
 };
 var _hoisted_2 = {
-  "class": "col text-center"
+  "class": "col-md-12 text-center"
 };
 var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
   href: "javascript:void(0);",
-  "class": "btn btn-primary me-lg-4 mb-2"
+  "class": "btn btn-lg btn-primary me-lg-4 mb-2"
 }, "Download QR Code", -1 /* HOISTED */);
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -24472,7 +24474,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[0] || (_cache[0] = function () {
       return $options.downloadReceipt && $options.downloadReceipt.apply($options, arguments);
     }),
-    "class": "btn btn-primary ms-lg-4 mb-2"
+    "class": "btn btn-lg btn-primary ms-lg-4 mb-2"
   }, "Download Receipt")])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true);
 }
 

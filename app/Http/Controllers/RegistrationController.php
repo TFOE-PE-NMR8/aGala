@@ -150,7 +150,7 @@ class RegistrationController extends Controller
     }
 
     public function registered($reference_number){
-        $data = Registration::where('reference_number', $reference_number)->with('registrant')->first();
+        $data = Registration::where('reference_number', $reference_number)->with(['registrant', 'registrant.guests'])->first();
         if(!$reference_number || !$data){
             return redirect(route('registration'));
         }
