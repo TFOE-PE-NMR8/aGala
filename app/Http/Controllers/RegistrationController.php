@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class RegistrationController extends Controller
 {
@@ -186,5 +187,12 @@ class RegistrationController extends Controller
         ]);
 
         return response()->json($payment, 200);
+    }
+
+    public function dowloadQRCode($registration_id){
+        $registration = Registration::find($registration_id);
+        $image = base64_encode(QrCode::errorCorrection('H')->format('png')->merge('theme/img/eagles-logo.png', .4, true)->size(200)->generate($registration->reference_number));
+        $raw_image_string = base64_decode($image);
+        return response($raw_image_string)->header('Content-Type', 'image/png');
     }
 }
