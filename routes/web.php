@@ -27,6 +27,7 @@ Auth::routes();
 Route::group(['middleware' => 'auth'], function(){
     Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
     Route::get('/registrants', [App\Http\Controllers\RegistrantController::class, 'index'])->name('registrants');
+    Route::get('/guests', [App\Http\Controllers\GuestController::class, 'index'])->name('guests');
     Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
 });
 
