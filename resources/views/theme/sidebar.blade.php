@@ -14,6 +14,12 @@
                 <span>Registrants</span>
             </a>
         </li><!-- End Dashboard Nav -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="/raffle">
+                <i class="bi bi-arrow-repeat"></i>
+                <span>Raffle</span>
+            </a>
+        </li>
     </ul>
 
 </aside><!-- End Sidebar-->
