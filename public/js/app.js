@@ -24274,7 +24274,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
     },
     onSubmit: function onSubmit() {
-      this.axios.post('/registration', this.form).then(function (response) {})["catch"](function (error) {});
+      var _this2 = this;
+      if (this.submitting) {
+        return;
+      }
+      this.submitting = true;
+      this.axios.post('/registration', this.form).then(function (response) {})["catch"](function (error) {
+        _this2.submitting = false;
+      });
     }
   },
   data: function data() {
@@ -24291,17 +24298,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         other_club: ''
       },
       clubs: [],
-      guest_no: 0
+      guest_no: 0,
+      submitting: false
     };
   },
   mounted: function mounted() {
-    var _this2 = this;
+    var _this3 = this;
     return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              _this2.getClubs();
+              _this3.getClubs();
             case 1:
             case "end":
               return _context2.stop();
@@ -24634,7 +24642,38 @@ var _hoisted_62 = {
 };
 var _hoisted_63 = ["onUpdate:modelValue", "id"];
 var _hoisted_64 = ["for"];
-var _hoisted_65 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"col-lg-12\"><div class=\"card\"><div class=\"card-body\"><div class=\"row g-3\"><div class=\"col-md-12 pt-3 text-center\"><button type=\"submit\" class=\"btn btn-primary btn-lg px-xxl-5 px-5\">Register</button></div></div></div></div></div>", 1);
+var _hoisted_65 = {
+  "class": "col-lg-12"
+};
+var _hoisted_66 = {
+  "class": "card"
+};
+var _hoisted_67 = {
+  "class": "card-body"
+};
+var _hoisted_68 = {
+  "class": "row g-3"
+};
+var _hoisted_69 = {
+  "class": "col-md-12 pt-3 text-center"
+};
+var _hoisted_70 = {
+  key: 0,
+  type: "submit",
+  "class": "btn btn-primary btn-lg px-xxl-5 px-5"
+};
+var _hoisted_71 = {
+  key: 1,
+  type: "button",
+  "class": "btn btn-primary disabled btn-lg px-xxl-3 px-3",
+  disabled: ""
+};
+var _hoisted_72 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+  "class": "spinner-border spinner-border-sm",
+  role: "status",
+  "aria-hidden": "true"
+}, null, -1 /* HOISTED */);
+
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _directive_mask = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveDirective)("mask");
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("form", {
@@ -24754,7 +24793,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }, null, 8 /* PROPS */, _hoisted_63), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.guests[i].name]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
       "for": 'guestName' + i
     }, "Full Name", 8 /* PROPS */, _hoisted_64)])])]);
-  }), 128 /* KEYED_FRAGMENT */))])])]), _hoisted_65], 32 /* HYDRATE_EVENTS */);
+  }), 128 /* KEYED_FRAGMENT */))])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_65, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_66, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_67, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_68, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_69, [!$data.submitting ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", _hoisted_70, "Register")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.submitting ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", _hoisted_71, [_hoisted_72, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Registering... ")])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])])])])], 32 /* HYDRATE_EVENTS */);
 }
 
 /***/ }),
