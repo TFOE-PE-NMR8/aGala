@@ -15,62 +15,91 @@
                                 <div class="text-secondary mt-4">
                                     <p>This receipt will be sent via email</p>
                                     <p>Reference number will be sent to your number via SMS</p>
+                                    <p>Please save the QR code. It will serve as e-ticket in the Gala event.</p>
                                 </div>
 
+                                <h4>Reference #: {{ $data->reference_number }}</h4>
+
                                 <div class="row mt-5">
-                                    <div class="col-md-6 text-md-end col-sm-12 text-sm-center">
-                                        <img src="data:image/png;base64, {!! base64_encode(QrCode::errorCorrection('H')->format('png')->merge('theme/img/eagles-logo.png', .4, true)->size(200)->generate('https://www.youtube.com/watch?v=dQw4w9WgXcQ')) !!}" />
-                                    </div>
-                                    <div class="col-md-6 text-md-start col-sm-12 text-sm-center">
+                                    <div class="col-lg-6 text-lg-end col-sm-12 text-sm-center mb-2">
+                                        <img src="data:image/png;base64, {!! base64_encode(QrCode::errorCorrection('H')->format('png')->merge('theme/img/eagles-logo.png', .4, true)->size(200)->generate($data->reference_number)) !!}" />
+                                   </div>
+                                    <div class="col-lg-6 text-lg-start col-sm-12 text-sm-center mb-2">
                                         <span class="fw-bolder">{{ ucfirst($data->registrant->title) }} {{ ucfirst($data->registrant->first_name) }} {{ ucfirst($data->registrant->last_name) }}</span>
                                         <br>
                                         <span>{{ $data->registrant->club }}</span>
-
-                                        @if ($data->registrant->guests)
-                                        <p class="mt-3">
+                                        @if ($data->registrant->guests->count() > 0)
+                                        <div class="mt-3">
                                             <span class="fw-bold">Guests</span>:
-                                            <ul class="list-unstyled">
+                                            <ol class="list">
                                                 @foreach ($data->registrant->guests as $guest)
-                                                    <li>{{ ucfirst($guest->name) }} - {{ ucfirst($guest->relation) }}</li>
+                                                    <li>{{ ucfirst($guest->relation) }} {{ ucfirst($guest->name) }}</li>
                                                 @endforeach
-                                            </ul>
-                                        </p>
-                                        @else
-                                            <p class="mt-3">No Guest</p>
+                                            </ol>
+                                        </div>
                                         @endif
+                                        <div class="mt-3">
+                                            Total amount to pay: <strong>PHP {{$data->total_amount}}</strong>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <registered-button></registered-button>
+                                <registered-button registration_id="{{$data->id}}"></registered-button>
 
-                                <div style="border-top:1px solid #777;height:1px;margin-top: 40px;"></div>
-
-                                <div class="row mt-4 mb-4 ms-4">
-                                    <div class="col text-md-start text-sm-center">
-                                        <h4 class="fw-bold">How to Pay?</h4>
+                                <div class="row border-top pt-4 mt-3 page-break-avoid">
+                                    <div class="col-md-12 mb-2">
+                                        <h4>Where to Pay?</h4>
                                     </div>
-                                    <div class="row mt-4">
-                                        <div class="col-md-4">
-                                            <img src="{{ asset('theme/img/gcash-logo.png') }}" width="200">
-                                        </div>
-                                        <div class="col-md-8 text-md-start text-sm-center mt-2">
-                                            <span class="fw-bolder">Kuya Kier</span>
-                                            <br>
-                                            <span>09350000000</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="row mt-4">
-                                        <div class="col-md-4">
-                                            <img src="{{ asset('theme/img/palawan-express.png') }}" width="200">
+                                    <div class="row pt-2 mb-4">
+                                        <div class="col-md-4 pt-2">
+                                            <img src="{{ asset('theme/img/gcash-logo.png') }}" alt="GCash" width="100">
                                         </div>
                                         <div class="col-md-8 text-md-start text-sm-center">
-                                            <span class="fw-bolder">Angelo Rebollos</span>
-                                            <br>
-                                            <span>09350000000</span>
+                                            <span><strong>09177228744</strong> - Kuya Angelo</span>
+                                            <br />
+                                            <span><strong>09271897249</strong> - Kuya Ryan</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-4 pt-2">
+                                            <img src="{{ asset('theme/img/palawan-express.png') }}" alt="Palawan Express" width="100">
+                                        </div>
+                                        <div class="col-md-8 text-md-start text-sm-center">
+                                            <span>Name: <strong>KIER M. PAQUE</strong></span><br />
+                                            <span>Phone: <strong>09971240523</strong></span><br />
+                                            <span>Address: <strong>PRK.15 TIBANGA ILIGAN CITY</strong></span>
                                         </div>
                                     </div>
                                 </div>
+
+                                 <div class="row pt-4 mt-3 border-top page-break-avoid">
+                                     <div class="col-md-12 mb-2 mb-4">
+                                         <h4>Next Step, How to Pay?</h4>
+                                     </div>
+                                     <div class="col-md-12 text-start">
+                                         <h5>For GCash payment:</h5>
+                                         <ol>
+                                             <li>Send your payment via GCash to any of these number <strong>09177228744</strong> / <strong>09271897249</strong></li>
+                                             <li>Download the screenshot of your payment.</li>
+                                             <li>Send the receipt to our facebook page (<a href="https://www.facebook.com/aGalaNmr8">https://fb.com/aGalaNmr8</a>) messenger and indicate your name.</li>
+                                             <li>You will receive a text confirmation shortly.</li>
+                                         </ol>
+                                         <h5>For Palawan Express Payment</h5>
+                                         <ol>
+                                             <li>Send the payment to: <br />
+                                                Name: <strong>KIER M. PAQUE</strong><br/>
+                                                 Phone: <strong>09971240523</strong><br/>
+                                                 Address: <strong>PRK.15 TIBANGA ILIGAN CITY</strong>
+                                             </li>
+                                             <li>
+                                                 Take a photo of the receipt, and send to our facebook page (<a href="https://www.facebook.com/aGalaNmr8">https://fb.com/aGalaNmr8</a>) messenger.
+                                             </li>
+                                             <li>You will receive a text confirmation shortly.</li>
+                                         </ol>
+                                     </div>
+                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -79,9 +108,3 @@
         </div>
     </div>
 @endsection
-<script>
-    import RegisteredButton from "../../js/components/RegisteredButton";
-    export default {
-        components: {RegisteredButton}
-    }
-</script>

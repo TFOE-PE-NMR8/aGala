@@ -64,6 +64,8 @@
                 <select v-model="form.marital_status" class="form-select" id="marital_status" aria-label="Title">
                   <option value="married" selected>Married</option>
                   <option value="single">Single</option>
+                  <option value="widow">Widow</option>
+                  <option value="widower">Widower</option>
                 </select>
                 <label for="title">Marital Status</label>
               </div>
@@ -121,7 +123,11 @@
         <div class="card-body">
           <div class="row g-3">
             <div class="col-md-12 pt-3 text-center">
-              <button type="submit" class="btn btn-primary btn-lg px-xxl-5 px-5">Register</button>
+              <button v-if="!submitting" type="submit" class="btn btn-primary btn-lg px-xxl-5 px-5">Register</button>
+              <button v-if="submitting" type="button" class="btn btn-primary disabled btn-lg px-xxl-3 px-3" disabled>
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Registering...
+              </button>
             </div>
           </div>
         </div>
@@ -151,9 +157,17 @@ export default {
       }
     },
     onSubmit(){
-      this.axios.post('/registration', this.form).then(response => {
-      }).catch(error => {
 
+      if(this.submitting){
+        return
+      }
+
+      this.submitting = true;
+
+      this.axios.post('/registration', this.form).then(response => {
+
+      }).catch(error => {
+        this.submitting = false;
       });
     }
   },
@@ -171,7 +185,8 @@ export default {
         other_club: ''
       },
       clubs: [],
-      guest_no: 0
+      guest_no: 0,
+      submitting: false
     }
   },
   async mounted() {

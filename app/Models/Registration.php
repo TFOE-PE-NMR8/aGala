@@ -12,4 +12,8 @@ class Registration extends Model
     public function registrant(){
         return $this->belongsTo(Registrant::class, 'registrant_id')->with("guests");
     }
+
+    public function payments(){
+        return $this->hasMany(PaymentLog::class);
+    }
 }

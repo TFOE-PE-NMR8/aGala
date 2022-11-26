@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\TicketNotification;
 use App\Models\Club;
 use App\Models\Guest;
+use App\Models\PaymentLog;
 use App\Models\Registrant;
 use App\Models\Registration;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class RegistrationController extends Controller
 {
@@ -138,15 +142,64 @@ class RegistrationController extends Controller
         $registration->total_amount = $quantity * 500;
         $registration->save();
 
+
+        $subjectMsg = "Thank you for registering to the aGala";
+        $msg = "Please pay the amount through our selected payment options";
+        Mail::to($registrant->email)->send(new TicketNotification($registration, $subjectMsg, $msg));
+
         return response()->json(['redirect' => route('registered', ['reference_number' => $reference_number])]);
     }
 
     public function registered($reference_number){
-        $data = Registration::where('reference_number', $reference_number)->with('registrant')->first();
+        $data = Registration::where('reference_number', $reference_number)->with(['registrant', 'registrant.guests'])->first();
         if(!$reference_number || !$data){
             return redirect(route('registration'));
         }
 
         return view('registration.registered')->with('data', $data);
+    }
+
+    public function pay(Request $request){
+
+        $amount = floatval($request->get('amount', 0));
+        $registration_id = $request->get('registration_id');
+        $payment_method = $request->get('payment_method');
+        $date = Carbon::now();
+
+        $user = Auth::user();
+
+        if(!$user){
+            return response()->json(['redirect' => route('login')]);
+        }
+
+        $user_id = $user->id;
+
+        $registration = Registration::find($registration_id);
+        $registration->paid_amount = floatval($registration->paid_amount) + $amount;
+        $registration->save();
+
+        $payment = PaymentLog::create([
+            'paid_user_id' => $user_id,
+            'registration_id' => $registration_id,
+            'amount' => $amount,
+            'payment_method' => $payment_method,
+            'date' => $date
+        ]);
+
+        return response()->json($payment, 200);
+    }
+
+    public function dowloadQRCode($registration_id){
+        $registration = Registration::find($registration_id);
+        $image = base64_encode(QrCode::errorCorrection('H')->format('png')->merge('theme/img/eagles-logo.png', .4, true)->size(200)->generate($registration->reference_number));
+        $raw_image_string = base64_decode($image);
+        $filename = "agala_qr_code_{$registration->id}.png";
+        $headers = [
+            'Content-Type' => 'image/png',
+            'Content-Disposition' => 'attachment; filename='. $filename,
+        ];
+        return response()->stream(function() use ($raw_image_string) {
+            echo $raw_image_string;
+        }, 200, $headers);
     }
 }

@@ -21,12 +21,15 @@ Route::get('/', function () {
 Route::get('/registration', [App\Http\Controllers\RegistrationController::class, 'registration'])->name('registration');
 Route::post('/registration', [App\Http\Controllers\RegistrationController::class, 'register'])->name('register');
 Route::get('/registered/{reference_number}', [App\Http\Controllers\RegistrationController::class, 'registered'])->name('registered');
+Route::get('/registered/{id}/dlqr', [App\Http\Controllers\RegistrationController::class, 'dowloadQRCode']);
 
 Auth::routes();
 
 Route::group(['middleware' => 'auth'], function(){
     Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
     Route::get('/registrants', [App\Http\Controllers\RegistrantController::class, 'index'])->name('registrants');
+    Route::get('/guests', [App\Http\Controllers\GuestController::class, 'index'])->name('guests');
+    Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
 });
 
 
