@@ -33,7 +33,7 @@
             <div class="col-12 col-sm-3 item">
                 <div class="item-inner">
                     <div class="icon"><i class="icon-house"></i></div>
-                    <div class="headline">1st Year</div>
+                    <div class="headline">1st year</div>
                     <div class="description">1st edition of a'GALA Night</div>
                 </div>
             </div>
