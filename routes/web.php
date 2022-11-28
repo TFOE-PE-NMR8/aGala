@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Registration;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -15,7 +16,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('index');
+    $data = Registration::whereColumn('total_amount', 'paid_amount')->get();
+    $total = 0;
+    foreach ($data as $item) {
+        $total += $item->quantity;
+    }
+    return view('index')->with('total_guests', $total);
 });
 
 Route::get('/registration', [App\Http\Controllers\RegistrationController::class, 'registration'])->name('registration');
