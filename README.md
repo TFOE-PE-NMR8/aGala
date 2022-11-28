@@ -13,16 +13,18 @@ Nothing Fancy
 
 
 ## Install NPM Packages
-on `npm_agala` container terminal
+on `npm_agala` container terminal/cli
 ```shell
 bash
 su node
 npm install
+npm run dev
+npm run watch (do this if you are only working with vue or js files inside resources/js directory)
 ```
 
 
 ## Install Composer Packages
-on `composer_agala` container terminal
+on `composer_agala` container terminal/cli
 ```shell
 bash
 composer install
@@ -30,15 +32,17 @@ composer install
 
 
 ## Setup/update Database
-on `php_agala` container terminal
+on `composer_agala` container terminal/cli
 ```shell
+bash
 php artisan migrate
 ```
 
 
 ## Seed Database
-on `php_agala` container terminal
+on `composer_agala` container terminal/cli
 ```shell
+bash
 php artisan db:seed
 ```
 
