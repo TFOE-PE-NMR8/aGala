@@ -30,6 +30,9 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/registrants', [App\Http\Controllers\RegistrantController::class, 'index'])->name('registrants');
     Route::get('/guests', [App\Http\Controllers\GuestController::class, 'index'])->name('guests');
     Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
+    Route::get('/raffle', [App\Http\Controllers\RaffleController::class, 'index']);
+    Route::get('/raffle/download-csv', [App\Http\Controllers\RaffleController::class, 'csv']);
+    Route::get('/raffle/raffle-100', [App\Http\Controllers\RaffleController::class, 'raffle_100']);
 });
 
 
