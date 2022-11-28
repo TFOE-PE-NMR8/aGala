@@ -30,28 +30,28 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-12 col-sm-3 item">
+            <div class="col-12 col-sm-4 item">
                 <div class="item-inner">
                     <div class="icon"><i class="icon-house"></i></div>
                     <div class="headline">1st year</div>
                     <div class="description">1st edition of a'GALA Night</div>
                 </div>
             </div>
-            <div class="col-12 col-sm-3 item">
-                <div class="item-inner">
-                    <div class="icon"><i class="icon-chat"></i></div>
-                    <div class="headline">{{ $total_guests }} guests</div>
-                    <div class="description">Successfully registered guests</div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-3 item">
+{{--            <div class="col-12 col-sm-3 item">--}}
+{{--                <div class="item-inner">--}}
+{{--                    <div class="icon"><i class="icon-chat"></i></div>--}}
+{{--                    <div class="headline">{{ $total_guests }} guests</div>--}}
+{{--                    <div class="description">Successfully registered guests</div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+            <div class="col-12 col-sm-4 item">
                 <div class="item-inner">
                     <div class="icon"><i class="icon-possibilities"></i></div>
                     <div class="headline">Performers</div>
                     <div class="description">Musicians, DJs, dancers</div>
                 </div>
             </div>
-            <div class="col-12 col-sm-3 item">
+            <div class="col-12 col-sm-4 item">
                 <div class="item-inner">
                     <div class="icon"><i class="icon-tie"></i></div>
                     <div class="headline">Raffle prizes</div>
