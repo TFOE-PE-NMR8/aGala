@@ -30,7 +30,13 @@
         "vue-loader": "^17.0.0"
     },
     "dependencies": {
+        "@vuepic/vue-datepicker": "^3.5.3",
+        "datatables.net": "^1.13.1",
+        "datatables.net-bs5": "^1.13.1",
+        "datatables.net-buttons": "^2.3.3",
+        "datatables.net-buttons-bs5": "^2.3.3",
         "html2pdf.js": "^0.10.1",
+        "jquery": "^3.6.1",
         "simple-datatables": "^4.0.7",
         "vue-axios": "^3.5.2",
         "vue-the-mask": "^0.11.1",
