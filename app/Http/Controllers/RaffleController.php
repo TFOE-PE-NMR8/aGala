@@ -10,7 +10,8 @@ class RaffleController extends Controller
     
     public function index()
     {
-        return view('raffle.index');
+        $url = "https://pickerwheel.com/emb/?choices=kuya,ate";
+        return view('raffle.index')->with('data', $url);
     }
 
     public function csv()
@@ -46,11 +47,27 @@ class RaffleController extends Controller
             foreach ($final as $item) {
                 fputcsv($file, [$item['name']]);
             }
-
             fclose($file);
         };
 
         return response()->stream($callback, 200, $headers);
 
+    }
+
+    public function raffle_100()
+    {
+        $data = Registrant::with('guests')->get();
+        $final = "";
+        foreach($data as $item){
+            
+            $final= $final . "{$item->first_name} {$item->last_name},";
+
+            foreach($item->guests as $guest) {
+                $final= $final . "{$guest->name},";
+            }
+        }
+        $url = "https://pickerwheel.com/emb/?choices=".$final;
+        $url = rtrim($url,",");
+        return view('raffle.index')->with('data', $url);
     }
 }

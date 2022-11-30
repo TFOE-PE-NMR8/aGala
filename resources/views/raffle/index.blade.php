@@ -7,8 +7,14 @@
             <div class="card info-card sales-card">
 
                 <div class="card-body pt-3">
-                    <a href="/raffle/download-csv" class="btn btn-outline-success btn-lg m-1">Download CSV</a>
-                    <a href="https://wheelofnames.com/sju-apq" target="_blank" class="btn btn-outline-info btn-lg m-1">Open Raffle</a>
+                    <a href="/dashboard" class="btn btn-outline-secondary btn-lg m-1">⬅</a>
+                    {{-- <a href="/raffle/download-csv" class="btn btn-outline-success btn-lg m-1">Download CSV</a> --}}
+                    <a href="/raffle/raffle-100" class="btn btn-outline-info btn-lg m-1">1st 100 Raffle</a>
+                    <a href="/raffle/raffle-main" class="btn btn-outline-primary btn-lg m-1">Main Raffle</a>
+                </div>
+                
+                <div class="card-body">
+                    <iframe src="{{$data}}" width="100%" height="800px" scrolling="no" frameborder="0"></iframe>
                 </div>
 
             </div>
