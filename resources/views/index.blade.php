@@ -19,7 +19,7 @@
                 <img src="{!! asset('theme/img/logo-small.png') !!}">
                 <h2 class="display-5 fw-bold lh-1 mb-3">NMR8<br/>a'Gala Night</h2>
                 <p class="lead">
-                    GALA Night is a pleasant, evening held in Frosty Bites Dome where people from various clubs of the Fraternal Order of Eagles Philippine Eagles can talk, dance and meet new friends to feel sweet home.
+                    a'GALA Night is a pleasant, evening held in Frosty Bites Dome where people from various clubs of the Fraternal Order of Eagles Philippine Eagles can talk, dance and meet new friends to feel sweet home.
                 </p>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-center">
                     <a href="/registration" class="btn btn-outline-primary">Register</a>
