@@ -37,6 +37,7 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/raffle/raffle-100', [App\Http\Controllers\RaffleController::class, 'raffle_100']);
     Route::get('/raffle/raffle-main', [App\Http\Controllers\RaffleController::class, 'raffle_main']);
     Route::get('/raffle/raffle-main-generate', [App\Http\Controllers\RaffleController::class, 'generate_main_entry']);
+    Route::get('/raffle/raffle-100-generate', [App\Http\Controllers\RaffleController::class, 'generate_100_entry']);
 });
 
 

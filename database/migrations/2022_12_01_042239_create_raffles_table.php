@@ -17,8 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->boolean('is_hundred')->default(false);
-            $table->boolean('has_won_main')->default(false);
-            $table->boolean('has_won_hundred')->default(false);
+            $table->boolean('has_won')->default(false);
             $table->timestamps();
         });
     }

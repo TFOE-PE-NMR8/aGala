@@ -11,8 +11,6 @@ class Raffle extends Model
     protected $fillable = [
         'name',
         'is_hundred',
-        'has_won_main',
-        'has_won_hundred',
-        'payment_method'
+        'has_won'
     ];
 }
