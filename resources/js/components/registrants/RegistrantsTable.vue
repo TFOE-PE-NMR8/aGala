@@ -57,7 +57,7 @@
                @close="showModal = false"
         >
             <template #header>
-                <h5 class="modal-title">Payment for {{ registrant.registration.reference_number }}</h5>
+                <h5 class="modal-title">Payment for {{ registrant.registration.reference_number }}: {{ registrant.first_name }} {{ registrant.last_name}}</h5>
             </template>
             <template #body>
                 <form class="row g-3">
@@ -126,15 +126,15 @@ export default {
             }
         }
     },
-    mounted() {
-        this.getRegistrants();
+    async mounted() {
+        await this.getRegistrants();
+        this.initTable();
     },
     methods: {
         getRegistrants() {
             axios.get("/api/registrants/datatable", {})
-                .then(response => {
-                    this.items = Object.freeze(response.data.data);
-                    this.initTable();
+                .then(async response => {
+                    this.items = Object.freeze(await response.data.data);
                 })
                 .catch(error => {
                     console.log(error)
@@ -142,13 +142,18 @@ export default {
         },
         savePaidData() {
             axios.post("/api/registration/pay", this.data)
-                .then(response => {
-                    var temp = this.items[this.current_index];
-
-                    temp.registration.amount = temp.registration.amount + response.data.amount;
-                    temp.registration.updated_at = response.data.updated_at;
-                    this.items[this.current_index] = temp;
+                .then(async response => {
+                    // var temp = this.items[this.current_index];
+                    //
+                    // temp.registration.amount = temp.registration.amount + response.data.amount;
+                    // temp.registration.updated_at = response.data.updated_at;
+                    // this.items[this.current_index] = temp;
+                    // this.showModal = false;
+                    // this.resetData();
+                    // this.current_index = 0;
+                    await this.getRegistrants();
                     this.showModal = false;
+                    this.reInitDatatable();
                     this.resetData();
                     this.current_index = 0;
                 })
@@ -156,6 +161,28 @@ export default {
                     console.log(error)
                 });
 
+        },
+        reInitDatatable() {
+            setTimeout(function () {
+                $("#data-table").DataTable({
+                    destroy: true,
+                    responsive: true,
+                    dom: "<'row'<'col-sm-4'l><'col-sm-4'B><'col-sm-4'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 dataTables_pager'p>>",
+                    buttons: ['copy', 'csv', 'excel'],
+                    lengthMenu: [25, 50, 100, 200],
+                    pageLength: 50,
+                    paging: true,
+                    searching: true,
+                    info: true,
+                    language: {
+                        'lengthMenu': 'Display _MENU_',
+                    },
+                    sorting: true,
+                    ordering: true,
+                    order: [[0, 'asc']],
+                    autoWidth: false
+                });
+            }, 1000)
         },
         resetData() {
             this.data = {
