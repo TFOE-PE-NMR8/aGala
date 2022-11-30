@@ -94,24 +94,6 @@ class RaffleController extends Controller
         return view('raffle.index')->with('data', $url);
     }
 
-    public function raffle_main()
-    {
-        $data = Registration::whereRaw('total_amount = paid_amount')->with(['registrant','registrant.guests'])->get();
-        
-        $final = "";
-        foreach($data as $item){
-            
-            $final= $final . "{$item->registrant->first_name} {$item->registrant->last_name},";
-            
-            foreach($item->registrant->guests as $guest) {
-                $final= $final . "{$guest->name},";
-            }
-        }
-        $url = "https://pickerwheel.com/emb/?choices=".$final;
-        $url = rtrim($url,",");
-        return view('raffle.index')->with('data', $url);
-    }
-
     public function generate_main_entry()
     {
         $data = Registration::whereRaw('total_amount = paid_amount')->with(['registrant','registrant.guests'])->get();
