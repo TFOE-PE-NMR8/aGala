@@ -17,6 +17,7 @@ class RaffleController extends Controller
     public function csv()
     {
         $data = Registrant::with('guests')->get();
+        dd($data);
         $final = [];
         foreach($data as $item){
             
@@ -54,15 +55,36 @@ class RaffleController extends Controller
 
     }
 
-    public function raffle_100()
+    public function raffle_main()
     {
-        $data = Registrant::with('guests')->get();
+        #$data = Registrant::with('guests')->get();
+        $data = Registration::whereRaw('paid_amount = total_amount')->with(['registrant','registrant.guests'])->get();
+        //dd($data);
         $final = "";
         foreach($data as $item){
             
-            $final= $final . "{$item->first_name} {$item->last_name},";
+            $final = $final . "{$item->registrant->first_name} {$item->registrant->last_name},";
+            
+            foreach($item->registrant->guests as $guest) {
+                $final= $final . "{$guest->name},";
+            }
+        }
+        $url = "https://pickerwheel.com/emb/?choices=".$final;
+        $url = rtrim($url,",");
+        return view('raffle.index')->with('data', $url);
+    }
 
-            foreach($item->guests as $guest) {
+    public function raffle_100()
+    {
+        #$data = Registrant::with('guests')->get();
+        $data = Registration::whereRaw('paid_amount = total_amount')->with(['registrant','registrant.guests'])->get();
+        //dd($data);
+        $final = "";
+        foreach($data as $item){
+            
+            $final = $final . "{$item->registrant->first_name} {$item->registrant->last_name},";
+            
+            foreach($item->registrant->guests as $guest) {
                 $final= $final . "{$guest->name},";
             }
         }
