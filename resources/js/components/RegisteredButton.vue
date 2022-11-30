@@ -17,6 +17,7 @@ export default {
     },
     methods: {
         downloadReceipt() {
+            this.showDiv = false;
             var opt = {
                 margin:       0.5,
                 filename:     'agala-registration-receipt.pdf',
@@ -26,7 +27,6 @@ export default {
                 jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
             };
 
-            this.showDiv = false;
             setTimeout(function () {
                 var element = document.getElementById('capture');
                 var buttons = document.getElementById('registeredButtons');

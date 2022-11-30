@@ -34,3 +34,15 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     forceTLS: (import.meta.env.VITE_PUSHER_SCHEME ?? 'https') === 'https',
 //     enabledTransports: ['ws', 'wss'],
 // });
+
+import 'jquery/dist/jquery.min.js';
+
+//Datatable Modules
+import "datatables.net/js/jquery.dataTables.min"
+import "datatables.net-bs5/js/dataTables.bootstrap5.min"
+import "datatables.net-bs5/css/dataTables.bootstrap5.min.css"
+import "datatables.net-buttons/js/dataTables.buttons.js"
+import "datatables.net-buttons/js/buttons.colVis.js"
+import "datatables.net-buttons/js/buttons.flash.js"
+import "datatables.net-buttons/js/buttons.html5.js"
+import "datatables.net-buttons/js/buttons.print.js"

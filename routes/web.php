@@ -16,11 +16,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    $data = Registration::whereColumn('total_amount', 'paid_amount')->get();
-    $total = 0;
-    foreach ($data as $item) {
-        $total += $item->quantity;
-    }
+    $total = Registration::whereColumn('total_amount', 'paid_amount')->sum('quantity');
     return view('index')->with('total_guests', $total);
 });
 

@@ -16,11 +16,20 @@ class Registrant extends Model
         'phone',
     ];
 
+    /**
+     * Get the user's full name.
+     *
+     * @return string
+     */
+    public function fullName(){
+        return "{$this->first_name} {$this->last_name}";
+    }
+
     public function guests(){
         return $this->hasMany(Guest::class);
     }
 
     public function registration(){
-       return $this->hasOne(Registration::class);
+       return $this->hasOne(Registration::class, "registrant_id", "id");
     }
 }

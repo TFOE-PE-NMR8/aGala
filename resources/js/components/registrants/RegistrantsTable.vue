@@ -1,95 +1,132 @@
 <template>
 
-    <div className="card" v-show="reg_table">
-        <div className="card-body">
+    <div class="card">
+        <div class="card-body">
             <!-- Table with stripped rows -->
-            <table className="table table-striped" id="data-table">
+            <table class="table table-separate table-head-custom dataTable no-footer dtr-inline table-hover mt-4"
+                   id="data-table">
                 <thead>
-                  <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">Name</th>
-                      <th scope="col">Phone</th>
-                      <th scope="col">Email</th>
-                      <th scope="col">Club</th>
-                      <th scope="col">Options</th>
-                  </tr>
+                <tr>
+                    <th scope="col">Reference #</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Club</th>
+                    <th scope="col">No. of Tickets</th>
+                    <th scope="col">Balance</th>
+                    <th scope="col">Last Updated</th>
+                    <th scope="col">Options</th>
+                    <th></th>
+                </tr>
                 </thead>
                 <tbody v-if="items.length">
 
-                  <tr  v-for="(item, i) in items" :key="item">
-                    <td>{{ i+1 }}</td>
-                    <td>{{ item.first_name + item.last_name }}</td>
+                <tr v-for="(item, i) in items" :key="item.id">
+                    <td>{{ item.registration.reference_number }}</td>
+                    <td>{{ item.first_name }} {{ item.last_name}}</td>
+                    <td>{{ item.title }}</td>
                     <td>{{ item.phone }}</td>
                     <td>{{ item.email }}</td>
                     <td>{{ item.club }}</td>
+                    <td>{{ item.registration.quantity }}</td>
+                    <td>{{ item.registration.total_amount - item.registration.paid_amount }}</td>
+                    <td>{{ item.registration.updated_at }}</td>
                     <td>
-                      <button type="button" class="btn btn-primary btn-sm">Details</button>
-                      <button type="button" style="margin-left: 4px" class="btn btn-success btn-sm" @click="viewPaid(item.id)">Paid</button>
+                        <button
+                            v-show="(item.registration.total_amount - item.registration.paid_amount) > 0"
+                            type="button"
+                            class="btn btn-success btn-sm"
+                            @click="viewPaid(item, i)">
+                            Pay
+                        </button>
                     </td>
-                  </tr>
+                    <td class="showData">
+                        <i class="fas fa-angle-down"></i>
+                    </td>
+                </tr>
                 </tbody>
             </table>
             <!-- End Table with stripped rows -->
         </div>
     </div>
 
-    <div className="card" v-show="guest_table">
-        <div className="card-body">
-            <!-- Table with stripped rows -->
-            <table className="table table-striped" id="data-table-guest">
-                <thead>
-                  <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">Name</th>
-                      <th scope="col">Phone</th>
-                      <th scope="col">Email</th>
-                      <th scope="col">Club</th>
-                      <th scope="col">Options</th>
-                  </tr>
-                </thead>
-                <tbody v-if="items.length">
-
-                  <tr  v-for="(item, i) in items" :key="item">
-                    <td>{{ i+1 }}</td>
-                    <td>{{ item.first_name + item.last_name }}</td>
-                    <td>{{ item.phone }}</td>
-                    <td>{{ item.email }}</td>
-                    <td>{{ item.club }}</td>
-                    <td>
-                      <button type="button" class="btn btn-primary btn-sm">Details</button>
-                      <button type="button" style="margin-left: 4px" class="btn btn-success btn-sm" @click="viewPaid(item.id)">Paid</button>
-                    </td>
-                  </tr>
-                </tbody>
-            </table>
-            <!-- End Table with stripped rows -->
-        </div>
-    </div>
-   
+    <Teleport to="body">
+        <!-- use the modal component, pass in the prop -->
+        <modal :show="showModal"
+               @close="showModal = false"
+        >
+            <template #header>
+                <h5 class="modal-title">Payment for {{ registrant.registration.reference_number }}</h5>
+            </template>
+            <template #body>
+                <form class="row g-3">
+                    <div class="col-12">
+                        <label class="form-label">Amount</label>
+                        <input type="number" class="form-control" v-model="data.amount" >
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Payment Date</label>
+                        <Datepicker v-model="data.payment_date"></Datepicker>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Payment Method</label>
+                        <select v-model="data.payment_method" class="form-control">
+                            <option value="gcash">GCash</option>
+                            <option value="palawan">Palawan</option>
+                            <option value="manual">Manual</option>
+                        </select>
+                    </div>
+                </form>
+            </template>
+            <template #footer>
+                <button
+                    class="btn btn-secondary"
+                    @click="showModal = false"
+                >Close
+                </button>
+                <button
+                    class="btn btn-primary ms-2"
+                    @click="savePaidData"
+                >Save
+                </button>
+            </template>
+        </modal>
+    </Teleport>
 </template>
 
 <script>
-import {DataTable} from "simple-datatables"
-import PaidModal from './PaidModal';
+import $ from 'jquery';
+
+// import PaidModal from './PaidModal';
+import Modal from '../Modal'
+import Options from "../../../../public/theme/vendor/chart.js/docs/general/options.html";
+
 
 export default {
     props: {
         url: String,
     },
     components: {
-      PaidModal
+        Options,
+        Modal
     },
     data() {
-      return {
-        items: [],
-        view_paidmodal: false,
-        reg_id: '',
-        reg_table: true,
-        guest_table: false
-      }
+        return {
+            items: [],
+            registrant: null,
+            showModal: false,
+            max_amount: 0,
+            current_index: 0,
+            data: {
+                amount: 0,
+                payment_date: "",
+                payment_method: "gcash",
+                registration_id: ""
+            }
+        }
     },
     mounted() {
-        console.log(this.url);
         this.getRegistrants();
     },
     methods: {
@@ -98,36 +135,71 @@ export default {
                 .then(response => {
                     this.items = Object.freeze(response.data.data);
                     this.initTable();
-
                 })
                 .catch(error => {
                     console.log(error)
                 });
         },
-        getGuest() {
-            axios.get("/api/registrants/datatable", {})
+        savePaidData() {
+            axios.post("/api/registration/pay", this.data)
                 .then(response => {
-                    this.items = Object.freeze(response.data.data);
-                    this.initTable();
+                    var temp = this.items[this.current_index];
 
+                    temp.registration.amount = temp.registration.amount + response.data.amount;
+                    temp.registration.updated_at = response.data.updated_at;
+                    this.items[this.current_index] = temp;
+                    this.showModal = false;
+                    this.resetData();
+                    this.current_index = 0;
                 })
                 .catch(error => {
                     console.log(error)
                 });
+
+        },
+        resetData() {
+            this.data = {
+                amount: 0,
+                payment_date: "",
+                payment_method: "gcash",
+                registration_id: ""
+            };
         },
         initTable() {
-            new DataTable("#data-table");
-            new DataTable("#data-table-guest");
+            setTimeout(function () {
+                $("#data-table").DataTable({
+                    responsive: true,
+                    dom: "<'row'<'col-sm-4'l><'col-sm-4'B><'col-sm-4'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 dataTables_pager'p>>",
+                    buttons: ['copy', 'csv', 'excel'],
+                    lengthMenu: [25, 50, 100, 200],
+                    pageLength: 50,
+                    paging: true,
+                    searching: true,
+                    info: true,
+                    language: {
+                        'lengthMenu': 'Display _MENU_',
+                    },
+                    sorting: true,
+                    ordering: true,
+                    order: [[0, 'asc']],
+                    autoWidth: false
+                });
+            }, 1000)
         },
-        viewPaid(id) {
-          this.reg_table = false;
-          this.guest_table = true;
-          this.getGuest();
+        viewPaid(item, index) {
+            this.current_index = index;
+            this.registrant = item;
+            this.resetData();
+            this.data.registration_id = item.registration.id;
+            this.max_amount = item.registration.total_amount - item.registration.paid_amount;
+            this.showModal = true;
         },
     }
 }
 </script>
 
-<style scoped>
-
+<style>
+    .dataTables_wrapper {
+        margin-top: 25px
+    }
 </style>
