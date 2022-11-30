@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\PaymentNotification;
 use App\Mail\TicketNotification;
 use App\Models\Club;
 use App\Models\Guest;
@@ -187,6 +188,12 @@ class RegistrationController extends Controller
             'payment_method' => $payment_method,
             'date' => $payment_date
         ]);
+
+        $registration->load('registrant');
+
+        $subjectMsg = "We received your payment for the aGala";
+        $msg = "Thank you for your Payment";
+        Mail::to($registration->registrant->email)->send(new PaymentNotification($registration, $subjectMsg, $msg, $payment));
 
         return response()->json($payment, 200);
     }
