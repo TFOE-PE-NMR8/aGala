@@ -9,9 +9,6 @@
                 <tr>
                     <th scope="col">Reference #</th>
                     <th scope="col">Name</th>
-                    <th scope="col">Title</th>
-                    <th scope="col">Phone</th>
-                    <th scope="col">Email</th>
                     <th scope="col">Club</th>
                     <th scope="col">No. of Tickets</th>
                     <th scope="col">Balance</th>
@@ -24,10 +21,7 @@
 
                 <tr v-for="(item, i) in items" :key="item.id">
                     <td>{{ item.registration.reference_number }}</td>
-                    <td>{{ item.first_name }} {{ item.last_name}}</td>
-                    <td>{{ item.title }}</td>
-                    <td>{{ item.phone }}</td>
-                    <td>{{ item.email }}</td>
+                    <td class="text-capitalize">{{ item.title }} {{ item.first_name }} {{ item.last_name}}</td>
                     <td>{{ item.club }}</td>
                     <td>{{ item.registration.quantity }}</td>
                     <td>{{ item.registration.total_amount - item.registration.paid_amount }}</td>
@@ -63,11 +57,11 @@
                 <form class="row g-3">
                     <div class="col-12">
                         <label class="form-label">Amount</label>
-                        <input type="number" class="form-control" v-model="data.amount" >
+                        <input type="number" class="form-control" v-model="data.amount" required>
                     </div>
                     <div class="col-12">
                         <label class="form-label">Payment Date</label>
-                        <Datepicker v-model="data.payment_date"></Datepicker>
+                        <Datepicker v-model="data.payment_date" required></Datepicker>
                     </div>
                     <div class="col-12">
                         <label class="form-label">Payment Method</label>
@@ -85,7 +79,10 @@
                     @click="showModal = false"
                 >Close
                 </button>
-                <button
+                <button v-if="!enableButton"
+                        class="btn btn-primary ms-2 disabled"  disabled>Save
+                </button>
+                <button v-if="enableButton"
                     class="btn btn-primary ms-2"
                     @click="savePaidData"
                 >Save
@@ -111,6 +108,11 @@ export default {
         Options,
         Modal
     },
+  computed: {
+    enableButton(){
+      return this.data.amount > 0 && this.data.payment_date !== "" && !this.disable;
+    }
+  },
     data() {
         return {
             items: [],
@@ -123,7 +125,8 @@ export default {
                 payment_date: "",
                 payment_method: "gcash",
                 registration_id: ""
-            }
+            },
+            disable: false
         }
     },
     async mounted() {
@@ -141,6 +144,7 @@ export default {
                 });
         },
         savePaidData() {
+            this.disable = true;
             axios.post("/api/registration/pay", this.data)
                 .then(async response => {
                     // var temp = this.items[this.current_index];
@@ -154,6 +158,7 @@ export default {
                     await this.getRegistrants();
                     this.showModal = false;
                     this.reInitDatatable();
+                    this.disable = false;
                     this.resetData();
                     this.current_index = 0;
                 })
