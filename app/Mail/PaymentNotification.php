@@ -15,6 +15,7 @@ class PaymentNotification extends Mailable
     public $data;
     public $subjectMsg;
     public $msg;
+    public $payment;
     public $price;
 
     /**
