@@ -10,11 +10,12 @@
                     <th scope="col">Reference #</th>
                     <th scope="col">Name</th>
                     <th scope="col">Club</th>
+                    <th scope="col">Phone</th>
                     <th scope="col">No. of Tickets</th>
                     <th scope="col">Balance</th>
                     <th scope="col">Last Updated</th>
                     <th scope="col">Options</th>
-                    <th></th>
+<!--                    <th></th>-->
                 </tr>
                 </thead>
                 <tbody v-if="items.length">
@@ -23,9 +24,10 @@
                     <td>{{ item.registration.reference_number }}</td>
                     <td class="text-capitalize">{{ item.title }} {{ item.first_name }} {{ item.last_name}}</td>
                     <td>{{ item.club }}</td>
+                    <td>{{ item.phone }}</td>
                     <td>{{ item.registration.quantity }}</td>
                     <td>{{ item.registration.total_amount - item.registration.paid_amount }}</td>
-                    <td>{{ item.registration.updated_at }}</td>
+                    <td>{{ $filters.dateTimeFormat(item.registration.updated_at) }}</td>
                     <td>
                         <button
                             v-show="(item.registration.total_amount - item.registration.paid_amount) > 0"
@@ -35,9 +37,9 @@
                             Pay
                         </button>
                     </td>
-                    <td class="showData">
-                        <i class="fas fa-angle-down"></i>
-                    </td>
+<!--                    <td class="showData">-->
+<!--                        <i class="fas fa-angle-down"></i>-->
+<!--                    </td>-->
                 </tr>
                 </tbody>
             </table>
@@ -99,7 +101,6 @@ import $ from 'jquery';
 import Modal from '../Modal'
 import Options from "../../../../public/theme/vendor/chart.js/docs/general/options.html";
 
-
 export default {
     props: {
         url: String,
@@ -112,6 +113,7 @@ export default {
     enableButton(){
       return this.data.amount > 0 && this.data.payment_date !== "" && !this.disable;
     }
+
   },
     data() {
         return {
@@ -226,6 +228,9 @@ export default {
             this.max_amount = item.registration.total_amount - item.registration.paid_amount;
             this.showModal = true;
         },
+        getDateTimeFormat(value){
+
+        }
     }
 }
 </script>

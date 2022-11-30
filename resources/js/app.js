@@ -84,4 +84,14 @@ app.component('guests-table', GuestsTable)
  * scaffolding. Otherwise, you will need to add an element yourself.
  */
 
+import moment from 'moment';
+app.config.globalProperties.$filters = {
+    dateTimeFormat(value) {
+        if (value) {
+            return moment(value).format('MM/DD/YYYY hh:mm A');
+        }
+        return value;
+    }
+}
+
 app.mount('#app');
