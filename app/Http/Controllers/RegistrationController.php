@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\PaymentNotification;
 use App\Mail\TicketNotification;
 use App\Models\Club;
 use App\Models\Guest;
@@ -161,9 +162,10 @@ class RegistrationController extends Controller
 
     public function pay(Request $request){
 
-        $amount = floatval($request->get('amount', 0));
-        $registration_id = $request->get('registration_id');
-        $payment_method = $request->get('payment_method');
+        $amount = floatval($request->post('amount', 0));
+        $registration_id = $request->post('registration_id');
+        $payment_date = Carbon::parse($request->post('payment_date'));
+        $payment_method = $request->post('payment_method');
         $date = Carbon::now();
 
         $user = Auth::user();
@@ -176,6 +178,7 @@ class RegistrationController extends Controller
 
         $registration = Registration::find($registration_id);
         $registration->paid_amount = floatval($registration->paid_amount) + $amount;
+        $registration->updated_at = $date;
         $registration->save();
 
         $payment = PaymentLog::create([
@@ -183,8 +186,14 @@ class RegistrationController extends Controller
             'registration_id' => $registration_id,
             'amount' => $amount,
             'payment_method' => $payment_method,
-            'date' => $date
+            'date' => $payment_date
         ]);
+
+        $registration->load('registrant');
+
+        $subjectMsg = "We received your payment for the aGala";
+        $msg = "Thank you for your Payment";
+        Mail::to($registration->registrant->email)->send(new PaymentNotification($registration, $subjectMsg, $msg, $payment));
 
         return response()->json($payment, 200);
     }

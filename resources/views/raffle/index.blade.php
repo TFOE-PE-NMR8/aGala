@@ -11,6 +11,7 @@
                     {{-- <a href="/raffle/download-csv" class="btn btn-outline-success btn-lg m-1">Download CSV</a> --}}
                     <a href="/raffle/raffle-100" class="btn btn-outline-info btn-lg m-1">1st 100 Raffle</a>
                     <a href="/raffle/raffle-main" class="btn btn-outline-primary btn-lg m-1">Main Raffle</a>
+                    <a href="/raffle/raffle-main-generate" class="btn btn-outline-primary btn-lg m-1">Generate Main Raffle</a>
                 </div>
                 
                 <div class="card-body">

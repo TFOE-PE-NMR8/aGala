@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Registration;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -15,7 +16,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('index');
+    $total = Registration::whereColumn('total_amount', 'paid_amount')->sum('quantity');
+    return view('index')->with('total_guests', $total);
 });
 
 Route::get('/registration', [App\Http\Controllers\RegistrationController::class, 'registration'])->name('registration');
@@ -34,6 +36,7 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/raffle/download-csv', [App\Http\Controllers\RaffleController::class, 'csv']);
     Route::get('/raffle/raffle-100', [App\Http\Controllers\RaffleController::class, 'raffle_100']);
     Route::get('/raffle/raffle-main', [App\Http\Controllers\RaffleController::class, 'raffle_main']);
+    
 });
 
 

@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Club;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class ClubSeeder extends Seeder
 {
@@ -26,6 +25,8 @@ class ClubSeeder extends Seeder
           ['code' => 'INLEC', 'name' => 'Iligan North Lady Eagles Club'],
           ['code' => 'RMLEC', 'name' => 'Red Mountain Lady Eagles Club']
         ];
-        DB::table('clubs')->insert($clubs);
+        foreach ($clubs as $club) {
+            Club::updateOrCreate($club);
+        }
     }
 }

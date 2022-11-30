@@ -8,7 +8,8 @@ import './bootstrap';
 import { createApp } from 'vue';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
-import VuejsSimpleDatatable from "vuejs-simple-datatable";
+import Datepicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
 
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
@@ -51,7 +52,6 @@ axios.interceptors.response.use(function(response){
 
 const app = createApp({});
 app.use(VueAxios, axios);
-app.use(VuejsSimpleDatatable);
 
 import ExampleComponent from './components/ExampleComponent.vue';
 import RegistrationForm from './components/RegistrationForm.vue';
@@ -60,10 +60,12 @@ import RegistrantsTable from "./components/registrants/RegistrantsTable.vue";
 import GuestsTable from "./components/guests/GuestsTable.vue";
 
 app.component('example-component', ExampleComponent);
+app.component('Datepicker', Datepicker);
 app.component('registration-form', RegistrationForm);
 app.component('registered-button', RegistrationButton);
 app.component('registrants-table', RegistrantsTable)
 app.component('guests-table', GuestsTable)
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue

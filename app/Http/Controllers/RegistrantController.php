@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\RegistrantResource;
 use App\Models\Registrant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use JamesDordoy\LaravelVueDatatable\Http\Resources\DataTableCollectionResource;
 
 class RegistrantController extends Controller
@@ -93,7 +94,7 @@ class RegistrantController extends Controller
         $orderBy = $request->input('dir');
         $searchValue = $request->input('search');
 
-        $data = Registrant::paginate($length);
+        $data = Registrant::with(['guests', 'registration'])->paginate(2000);
 
         return response()->json($data);
     }

@@ -1,0 +1,148 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: agala-staging
+  name: agala-staging
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: agala-staging
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: agala-staging
+    spec:
+      containers:
+        - command:
+            - /bin/bash
+            - -c
+            - cp
+          env:
+            - name: SMTP_USERNAME
+              value: bgr.cap
+            - name: SMTP_PASSWORD
+              value: '%sj&sVOuFyvD'
+            - name: DB_DRIVER
+              value: mysql
+            - name: DB_CONNECTION
+              value: mysql
+            - name: DB_HOST
+              value: dblab.braathe.group
+            - name: DB_PORT
+              value: "34632"
+            - name: DB_DATABASE
+              value: p5lab
+            - name: DB_USERNAME
+              value: v3r1ty
+            - name: DB_PASSWORD
+              value: UT@Vh@LEV!RbuTruW
+            - name: BRAATHE_DBHOST
+              value: dblab.braathe.group
+            - name: BRAATHE_DBPORT
+              value: "34632"
+            - name: BRAATHE_DBNAME
+              value: p5lab
+            - name: BRAATHE_DBUSER
+              value: v3r1ty
+            - name: BRAATHE_DBPASS
+              value: UT@Vh@LEV!RbuTruW
+            - name: DB_JSON_HOST
+              value: dblab.braathe.group
+            - name: DB_JSON_DATABASE
+              value: jsonlab
+            - name: DB_JSON_USERNAME
+              value: v3r1ty
+            - name: DB_JSON_PASSWORD
+              value: UT@Vh@LEV!RbuTruW
+            - name: BETA
+              value: "True"
+            - name: MASTER_KEY
+              value: tc9pGKtseVkcbOWlgfB3lvSNEYeg00KsPhR1p6f0LWduEILMPQ2EFofhJiwHXn61hW63kRC9d3Feg4B2UZ0AnQ==
+            - name: P2BRAATHE_COSMOS_KEY
+              value: cSx0xGdNMcmjX9xOwkrW89M3X2lIrHbbyeH72BWAmnibskKTrD8MSMZh9rF2IBP7m5iLsOMMgjr4EiTlhLwYKQ==
+            - name: EMAIL_TO
+              value: ane.aasen@braathe.no
+            - name: LOG_RUNTIME
+              value: "1"
+          image: agala/php:latest
+          imagePullPolicy: IfNotPresent
+          name: agala-staging
+          ports:
+            - containerPort: 80
+              name: agala-staging
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /app
+              name: app
+            - mountPath: /root/.ssh
+              name: id-rsa
+      hostname: agala-staging
+      initContainers:
+        - args:
+            - find /app -mindepth 1 -delete; git clone -b agala-staging --depth=1 --single-branch
+              git@github.com:TFOE-PE-NMR8/aGala.git /app
+          command:
+            - /bin/sh
+            - -c
+          image: alpine/git@sha256:8f5659025d83a60e9d140123bb1b27f3c334578aef10d002da4e5848580f1a6c
+          imagePullPolicy: IfNotPresent
+          name: init
+          volumeMounts:
+            - mountPath: /app
+              name: app
+            - mountPath: /root/.ssh
+              name: id-rsa
+        - args:
+            - cd /app && npm install && npm run development
+          command:
+            - /bin/sh
+            - -c
+          image: node:latest
+          imagePullPolicy: IfNotPresent
+          name: npm
+          volumeMounts:
+            - mountPath: /app
+              name: app
+        - args:
+            - cd /app && npm install && npm run development
+          command:
+            - /bin/sh
+            - -c
+          image: node:latest
+          imagePullPolicy: IfNotPresent
+          name: npm
+          volumeMounts:
+            - mountPath: /app
+              name: app
+      restartPolicy: Always
+      volumes:
+        - emptyDir: {}
+          name: app
+        - name: id-rsa
+          secret:
+            defaultMode: 384
+            items:
+              - key: Neiell_rsa
+                path: id_rsa
+              - key: known_hosts
+                path: known_hosts
+            secretName: neiell-test
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: agala-staging
+  namespace: default
+spec:
+  type: ClusterIP
+  selector:
+    app: agala-staging
+  ports:
+    - name: agala-staging
+      protocol: TCP
+      port: 80
+      targetPort: 80

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Registration;
 use App\Models\Registrant;
+use App\Models\Raffle;
 class RaffleController extends Controller
 {
     
@@ -91,5 +92,47 @@ class RaffleController extends Controller
         $url = "https://pickerwheel.com/emb/?choices=".$final;
         $url = rtrim($url,",");
         return view('raffle.index')->with('data', $url);
+    }
+
+    public function raffle_main()
+    {
+        $data = Registration::whereRaw('total_amount = paid_amount')->with(['registrant','registrant.guests'])->get();
+        
+        $final = "";
+        foreach($data as $item){
+            
+            $final= $final . "{$item->registrant->first_name} {$item->registrant->last_name},";
+            
+            foreach($item->registrant->guests as $guest) {
+                $final= $final . "{$guest->name},";
+            }
+        }
+        $url = "https://pickerwheel.com/emb/?choices=".$final;
+        $url = rtrim($url,",");
+        return view('raffle.index')->with('data', $url);
+    }
+
+    public function generate_main_entry()
+    {
+        $data = Registration::whereRaw('total_amount = paid_amount')->with(['registrant','registrant.guests'])->get();
+        
+        foreach($data as $item){
+            Raffle::create([
+                'name' => "{$item->registrant->first_name} {$item->registrant->last_name}",
+                'is_hundred' => false,
+                'has_won_main' => false,
+                'has_won_hundred' => false,
+            ]);
+
+            foreach($item->registrant->guests as $guest) {
+                Raffle::create([
+                    'name' => $guest->name,
+                    'is_hundred' => false,
+                    'has_won_main' => false,
+                    'has_won_hundred' => false,
+                ]);
+            }
+        }
+       
     }
 }
