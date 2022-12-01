@@ -1,49 +1,63 @@
 <template>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <div class="row">
+                            <div class="col-3">
+                                Total Collections: <span class="fs-3 ms-2">{{ total_collection }}/{{ total_collectibles }}</span>
+                            </div>
+                            <div class="col-3">
+                                Total Paid Tickets: <span class="fs-3 ms-2">{{ total_paid_tickets }}/{{ total_tickets }}</span>
+                            </div>
+                        </div>
+                    </h5>
 
-    <div class="card">
-        <div class="card-body">
-            <!-- Table with stripped rows -->
-            <table class="table table-separate table-head-custom dataTable no-footer dtr-inline table-hover mt-4"
-                   id="data-table">
-                <thead>
-                <tr>
-                    <th scope="col">Reference #</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Club</th>
-                    <th scope="col">Phone</th>
-                    <th scope="col">No. of Tickets</th>
-                    <th scope="col">Balance</th>
-                    <th scope="col">Last Updated</th>
-                    <th scope="col">Options</th>
-<!--                    <th></th>-->
-                </tr>
-                </thead>
-                <tbody v-if="items.length">
+                    <!-- Table with stripped rows -->
+                    <table class="table table-separate table-head-custom dataTable no-footer dtr-inline table-hover mt-4"
+                           id="data-table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Reference #</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Club</th>
+                            <th scope="col">Phone</th>
+                            <th scope="col">No. of Tickets</th>
+                            <th scope="col">Balance</th>
+                            <th scope="col">Last Updated</th>
+                            <th scope="col">Options</th>
+                            <!--                    <th></th>-->
+                        </tr>
+                        </thead>
+                        <tbody v-if="items.length">
 
-                <tr v-for="(item, i) in items" :key="item.id">
-                    <td>{{ item.registration.reference_number }}</td>
-                    <td class="text-capitalize">{{ item.title }} {{ item.first_name }} {{ item.last_name}}</td>
-                    <td>{{ item.club }}</td>
-                    <td>{{ item.phone }}</td>
-                    <td>{{ item.registration.quantity }}</td>
-                    <td>{{ item.registration.total_amount - item.registration.paid_amount }}</td>
-                    <td>{{ $filters.dateTimeFormat(item.registration.updated_at) }}</td>
-                    <td>
-                        <button
-                            v-show="(item.registration.total_amount - item.registration.paid_amount) > 0"
-                            type="button"
-                            class="btn btn-success btn-sm"
-                            @click="viewPaid(item, i)">
-                            Pay
-                        </button>
-                    </td>
-<!--                    <td class="showData">-->
-<!--                        <i class="fas fa-angle-down"></i>-->
-<!--                    </td>-->
-                </tr>
-                </tbody>
-            </table>
-            <!-- End Table with stripped rows -->
+                        <tr v-for="(item, i) in items" :key="item.id">
+                            <td>{{ item.registration.reference_number }}</td>
+                            <td class="text-capitalize">{{ item.title }} {{ item.first_name }} {{ item.last_name}}</td>
+                            <td>{{ item.club }}</td>
+                            <td>{{ item.phone }}</td>
+                            <td>{{ item.registration.quantity }}</td>
+                            <td>{{ item.registration.total_amount - item.registration.paid_amount }}</td>
+                            <td>{{ $filters.dateTimeFormat(item.registration.updated_at) }}</td>
+                            <td>
+                                <button
+                                    v-show="(item.registration.total_amount - item.registration.paid_amount) > 0"
+                                    type="button"
+                                    class="btn btn-success btn-sm"
+                                    @click="viewPaid(item, i)">
+                                    Pay
+                                </button>
+                            </td>
+                            <!--                    <td class="showData">-->
+                            <!--                        <i class="fas fa-angle-down"></i>-->
+                            <!--                    </td>-->
+                        </tr>
+                        </tbody>
+                    </table>
+                    <!-- End Table with stripped rows -->
+                </div>
+            </div>
         </div>
     </div>
 
@@ -112,8 +126,29 @@ export default {
   computed: {
     enableButton(){
       return this.data.amount > 0 && this.data.payment_date !== "" && !this.disable;
-    }
-
+    },
+    total_collection(){
+        return this.items.reduce((acc, ele) => {
+            return acc + parseFloat(ele.registration.paid_amount);
+        }, 0);
+    },
+    total_collectibles(){
+        return this.items.reduce((acc, ele) => {
+            return acc + parseFloat(ele.registration.total_amount);
+        }, 0);
+    },
+    total_paid_tickets(){
+        return this.items.reduce((acc, ele) => {
+            if(ele.registration.total_amount === ele.registration.paid_amount) {
+                return acc + parseInt(ele.registration.quantity);
+            }
+        }, 0);
+    },
+    total_tickets(){
+        return this.items.reduce((acc, ele) => {
+            return acc + parseFloat(ele.registration.quantity);
+        }, 0);
+    },
   },
     data() {
         return {
@@ -133,13 +168,13 @@ export default {
     },
     async mounted() {
         await this.getRegistrants();
-        this.initTable();
     },
     methods: {
         getRegistrants() {
             axios.get("/api/registrants/datatable", {})
                 .then(async response => {
                     this.items = Object.freeze(await response.data.data);
+                    this.initDatatable();
                 })
                 .catch(error => {
                     console.log(error)
@@ -159,7 +194,7 @@ export default {
                     // this.current_index = 0;
                     await this.getRegistrants();
                     this.showModal = false;
-                    this.reInitDatatable();
+                    this.initDatatable();
                     this.disable = false;
                     this.resetData();
                     this.current_index = 0;
@@ -169,7 +204,7 @@ export default {
                 });
 
         },
-        reInitDatatable() {
+        initDatatable() {
             setTimeout(function () {
                 $("#data-table").DataTable({
                     destroy: true,
@@ -198,27 +233,6 @@ export default {
                 payment_method: "gcash",
                 registration_id: ""
             };
-        },
-        initTable() {
-            setTimeout(function () {
-                $("#data-table").DataTable({
-                    responsive: true,
-                    dom: "<'row'<'col-sm-4'l><'col-sm-4'B><'col-sm-4'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 dataTables_pager'p>>",
-                    buttons: ['copy', 'csv', 'excel'],
-                    lengthMenu: [25, 50, 100, 200],
-                    pageLength: 50,
-                    paging: true,
-                    searching: true,
-                    info: true,
-                    language: {
-                        'lengthMenu': 'Display _MENU_',
-                    },
-                    sorting: true,
-                    ordering: true,
-                    order: [[0, 'asc']],
-                    autoWidth: false
-                });
-            }, 1000)
         },
         viewPaid(item, index) {
             this.current_index = index;
