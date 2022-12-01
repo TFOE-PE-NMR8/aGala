@@ -128,26 +128,30 @@ export default {
       return this.data.amount > 0 && this.data.payment_date !== "" && !this.disable;
     },
     total_collection(){
-        return this.items.reduce((acc, ele) => {
-            return acc + parseFloat(ele.registration.paid_amount);
-        }, 0);
+        let collection = this.items.reduce((acc, ele) => {
+        return acc + parseFloat(ele.registration.paid_amount);
+      }, 0);
+        return collection ? collection : 0;
     },
     total_collectibles(){
-        return this.items.reduce((acc, ele) => {
+      let collection =  this.items.reduce((acc, ele) => {
             return acc + parseFloat(ele.registration.total_amount);
         }, 0);
+      return collection ? collection : 0;
     },
     total_paid_tickets(){
-        return this.items.reduce((acc, ele) => {
+        let tickets =  this.items.reduce((acc, ele) => {
             if(ele.registration.total_amount === ele.registration.paid_amount) {
                 return acc + parseInt(ele.registration.quantity);
             }
         }, 0);
+      return tickets ? tickets : 0;
     },
     total_tickets(){
-        return this.items.reduce((acc, ele) => {
+      let tickets =  this.items.reduce((acc, ele) => {
             return acc + parseFloat(ele.registration.quantity);
         }, 0);
+      return tickets ? tickets : 0;
     },
   },
     data() {
