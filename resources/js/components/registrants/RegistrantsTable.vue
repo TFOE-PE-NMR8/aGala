@@ -6,10 +6,10 @@
                     <h5 class="card-title">
                         <div class="row">
                             <div class="col-3">
-                                Total Collections: <span class="fs-3 ms-2">{{ total_collection }}/{{ total_collectibles }}</span>
+                                Total Collections: <span class="fs-3 ms-2">{{ total_collection.toLocaleString() }}/{{ total_collectibles.toLocaleString() }}</span>
                             </div>
                             <div class="col-3">
-                                Total Paid Tickets: <span class="fs-3 ms-2">{{ total_paid_tickets }}/{{ total_tickets }}</span>
+                                Total Paid Tickets: <span class="fs-3 ms-2">{{ total_paid_tickets.toLocaleString() }}/{{ total_tickets.toLocaleString() }}</span>
                             </div>
                         </div>
                     </h5>
