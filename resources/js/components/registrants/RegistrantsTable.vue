@@ -127,29 +127,39 @@ export default {
     enableButton(){
       return this.data.amount > 0 && this.data.payment_date !== "" && !this.disable;
     },
-    total_collection(){
-        let collection = this.items.reduce((acc, ele) => {
-        return acc + parseFloat(ele.registration.paid_amount);
+    total_collection() {
+      const collection = this.items.reduce((acc, ele) => {
+        const amount = ele.registration.paid_amount ? ele.registration.paid_amount : 0;
+        return acc + parseFloat(amount);
       }, 0);
-        return collection ? collection : 0;
+      return collection ? collection : 0;
     },
     total_collectibles(){
-      let collection =  this.items.reduce((acc, ele) => {
-            return acc + parseFloat(ele.registration.total_amount);
-        }, 0);
+      const collection =  this.items.reduce((acc, ele) => {
+          const amount = ele.registration.total_amount ? ele.registration.total_amount : 0;
+          return acc + parseFloat(amount);
+      }, 0);
       return collection ? collection : 0;
     },
     total_paid_tickets(){
-        let tickets =  this.items.reduce((acc, ele) => {
-            if(ele.registration.total_amount === ele.registration.paid_amount) {
-                return acc + parseInt(ele.registration.quantity);
-            }
-        }, 0);
+      const tickets =  this.items.reduce((acc, ele) => {
+          const qty = ele.registration.quantity ? ele.registration.quantity : 0;
+          const total_amount = ele.registration.total_amount ? ele.registration.total_amount : 0;
+          const paid_amount = ele.registration.paid_amount ? ele.registration.paid_amount : 0;
+          if(total_amount === paid_amount) {
+              return acc + parseInt(qty);
+          }
+          if(paid_amount >= 500){
+            return acc + (paid_amount / 500)
+          }
+          return acc;
+      }, 0);
       return tickets ? tickets : 0;
     },
     total_tickets(){
-      let tickets =  this.items.reduce((acc, ele) => {
-            return acc + parseFloat(ele.registration.quantity);
+      const tickets = this.items.reduce((acc, ele) => {
+            const quantity = ele.registration.quantity ? ele.registration.quantity : 0;
+            return acc + parseInt(quantity);
         }, 0);
       return tickets ? tickets : 0;
     },
@@ -188,14 +198,6 @@ export default {
             this.disable = true;
             axios.post("/api/registration/pay", this.data)
                 .then(async response => {
-                    // var temp = this.items[this.current_index];
-                    //
-                    // temp.registration.amount = temp.registration.amount + response.data.amount;
-                    // temp.registration.updated_at = response.data.updated_at;
-                    // this.items[this.current_index] = temp;
-                    // this.showModal = false;
-                    // this.resetData();
-                    // this.current_index = 0;
                     await this.getRegistrants();
                     this.showModal = false;
                     this.initDatatable();
