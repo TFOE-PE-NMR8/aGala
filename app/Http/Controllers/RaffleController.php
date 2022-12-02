@@ -6,15 +6,25 @@ use App\Models\Registration;
 use App\Models\Registrant;
 use App\Models\Raffle;
 
-use function PHPUnit\Framework\isNull;
 
 class RaffleController extends Controller
 {
     
     public function index()
     {
+        $data_main = Raffle::whereRaw('is_hundred = 0 AND has_won = 1 ORDER BY name ASC')->get();
+        $data_100 = Raffle::whereRaw('is_hundred = 1 AND has_won = 1 ORDER BY name ASC')->get();
+        $final = "";
+        $winner_main = array();
+        $winner_100 = array();
+        foreach($data_main as $item){
+            array_push($winner_main,$item->name);
+        }
+        foreach($data_100 as $item){
+            array_push($winner_100,$item->name);
+        }
         $url = "https://pickerwheel.com/emb/?choices=kuya,ate";
-        return view('raffle.index')->with('url', $url);
+        return view('raffle.index')->with(compact(['winner_main','winner_100','url']));
     }
 
     public function csv()
@@ -62,32 +72,54 @@ class RaffleController extends Controller
     {
         #$data = Registrant::with('guests')->get();
         $data = Raffle::whereRaw('is_hundred = 0 AND has_won = 0')->get();
+        $data_main = Raffle::whereRaw('is_hundred = 0 AND has_won = 1 ORDER BY name ASC')->get();
+        $data_100 = Raffle::whereRaw('is_hundred = 1 AND has_won = 1 ORDER BY name ASC')->get();
         $final = "";
+        $winner_main = array();
+        $winner_100 = array();
+
         foreach($data as $item){
             $final = $final . "{$item->name},";
         }
+        foreach($data_main as $item){
+            array_push($winner_main,$item->name);
+        }
+        foreach($data_100 as $item){
+            array_push($winner_100,$item->name);
+        }
+
         $url = "https://pickerwheel.com/emb/?choices=".$final;
         $url = rtrim($url,",");
-        return view('raffle.index')->with('url', $url);
+        return view('raffle.index')->with(compact(['winner_main','winner_100','url']));
     }
 
     public function raffle_100()
     {
         #$data = Registrant::with('guests')->get();
         $data = Raffle::whereRaw('is_hundred = 1 AND has_won = 0')->get();
+        $data_main = Raffle::whereRaw('is_hundred = 0 AND has_won = 1 ORDER BY name ASC')->get();
+        $data_100 = Raffle::whereRaw('is_hundred = 1 AND has_won = 1 ORDER BY name ASC')->get();
         $final = "";
+        $winner_main = array();
+        $winner_100 = array();
+
         foreach($data as $item){
             $final = $final . "{$item->name},";
         }
+        foreach($data_main as $item){
+            array_push($winner_main,$item->name);
+        }
+        foreach($data_100 as $item){
+            array_push($winner_100,$item->name);
+        }
+
         $url = "https://pickerwheel.com/emb/?choices=".$final;
         $url = rtrim($url,",");
-        return view('raffle.index')->with('url', $url);
+        return view('raffle.index')->with(compact(['winner_main','winner_100','url']));
     }
 
     public function generate_100_entry()
     {
-        #$data = Registrant::with('guests')->get();
-        #$data = Registration::whereRaw('paid_amount = total_amount')->with(['registrant','registrant.guests'])->get();
         $data1 = Registration::whereRaw('total_amount = paid_amount ORDER BY updated_at ASC')->with(['registrant','registrant.guests'])->get();
         
         $final = "";
@@ -121,16 +153,13 @@ class RaffleController extends Controller
                 if($limit=='0')break 2;
             }
         }
-        $message = "1st 100 Paid Registrant Entry Created!";
-        $url = "https://pickerwheel.com/emb/?choices=kuya,ate";
-        return view('raffle.index')->with(compact(['message','url']));
+        return redirect('/raffle/raffle-100');
     }
 
     public function generate_main_entry()
     {
-        #$data = Registration::whereRaw('total_amount = paid_amount')->with(['registrant','registrant.guests'])->get();
         $data1 = Registration::whereRaw('total_amount = paid_amount ORDER BY updated_at ASC')->with(['registrant','registrant.guests'])->get();
-        #dd($data1);
+        
         foreach($data1 as $item){
             $name = "{$item->registrant->first_name} {$item->registrant->last_name}";
             $ret = Raffle::where('name',$name)->where('is_hundred',0)->get()->first();
@@ -156,8 +185,22 @@ class RaffleController extends Controller
                 }
             }
         }
-        
-        $url = "https://pickerwheel.com/emb/?choices=kuya,ate";
-        return view('raffle.index')->with('url', $url);
+        return redirect('/raffle/raffle-main');
     }
+
+    public function update(Request $request)
+    {
+        Raffle::where('name',$request->name)
+            ->where('is_hundred',$request->mode)
+            ->get()
+            ->first()
+            ->update(['has_won'=>'1']);
+        if($request->mode == 1){
+            return redirect('/raffle/raffle-100');
+        }else{
+            return redirect('/raffle/raffle-main');
+        }
+    }
+
+    
 }
