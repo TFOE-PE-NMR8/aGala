@@ -190,15 +190,39 @@ class RaffleController extends Controller
 
     public function update(Request $request)
     {
-        Raffle::where('name',$request->name)
-            ->where('is_hundred',$request->mode)
-            ->get()
-            ->first()
-            ->update(['has_won'=>'1']);
-        if($request->mode == 1){
-            return redirect('/raffle/raffle-100');
+        // Raffle::where('name',$request->name)
+        //     ->where('is_hundred',$request->mode)
+        //     ->get()
+        //     ->first()
+        //     ->update(['has_won'=>'1']);
+
+
+        $winner = Raffle::where('name',$request->name)
+                    ->where('is_hundred',$request->mode)
+                    ->get()
+                    ->first();
+        $msg ="";
+        if(is_null($winner))
+        {
+            $wild_card = Raffle::select('name')->whereRaw("name LIKE '%{$request->name}%'")
+                    ->get()
+                    ->first();
+            if(is_null($wild_card))
+            {
+                return redirect()->back()->withSuccess('Name not found: '.$request->name);
+            }else{
+                $msg = "Name '{$request->name}' not found. Do you mean '{$wild_card->name}'?";
+                return redirect()->back()->withSuccess($msg);
+            }
+            
         }else{
-            return redirect('/raffle/raffle-main');
+            $winner->update(['has_won'=>'1']);
+        }
+
+        if($request->mode == 1){
+            return redirect('/raffle/raffle-100')->with('msg',$msg);
+        }else{
+            return redirect('/raffle/raffle-main')->with('msg',$msg);
         }
     }
 

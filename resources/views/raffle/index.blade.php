@@ -15,7 +15,7 @@
 <div class="row">
   <div class="col-sm-9">
     <div class="card glass">
-      <div class="card-body" style="clip-path: circle(343px at 50% 47.5%);">
+      <div class="card-body">
           <iframe src="{{$url}}" width="100%" height="800px" scrolling="no" frameborder="0"></iframe>
       </div>
     </div>
@@ -23,7 +23,15 @@
   <div class="col-sm-3">
     <div class="card glass" style="height: 828px;">
       <div class="card-body">
-        <h5 class="card-title text-center">{{$ttl}}</h5><hr>
+        <h5 class="card-title text-center">{{$ttl}}</h5>
+        @if(session('success'))
+          <div class="alert rounded-1 p-2" style="background: #ff5967; font-size: 13px" id="alert">
+              {{session('success')}}
+              <span onclick="hide(); return false" id="close-btn" style="float: right; cursor: pointer;">x</span>
+          </div>
+          
+        @endif
+        <hr>
         <div class="dropdown text-center">
           <a href="/dashboard" class="btn btn-secondary" style="border-top-right-radius: 0; border-bottom-right-radius: 0;">⬅</a>
           <button class="btn btn-warning dropdown-toggle rounded-0" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
@@ -72,4 +80,11 @@
   </div>
 </div>
 @endsection
-
+@section('scripts')
+<script type="text/javascript">
+  var x = document.getElementById("alert");
+  function hide(){
+     document.getElementById('alert').style.display="none";
+  }
+</script>
+@endsection
