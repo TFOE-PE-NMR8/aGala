@@ -100,6 +100,32 @@
                                      </div>
                                  </div>
 
+                                 <div class="row pt-4 mt-3 border-top page-break-avoid">
+                                     <div class="col-md-12 mb-2 mb-4">
+                                         <h4>Payment Status</h4>
+                                     </div>
+                                     <div class="col-md-12 text-start">
+                                        @if ($data->total_amount == $data->paid_amount)
+                                             <h5 style="text-align: center;"><div class="icon" style="color: green"> <i class="bi bi-check-circle-fill" style="margin-right: 10px; font-size: 2.5rem; vertical-align: middle;"></i>Payment Confirmed!</div></h5>
+                                        @else
+                                            <h5 style="text-align: center;"><div class="icon" style="color: red"> <i class="bi bi-clock-history" style="margin-right: 10px; font-size: 2.5rem; vertical-align: middle;"></i>We are waiting for your payment</div></h5>
+                                        @endif
+                                        
+                                         
+                                     </div>
+                                     <div class="col-md-12 text-start" style="margin-top: 20px">
+                                         @if ($data->total_amount == $data->paid_amount)
+                                         <ul>
+                                             <li>Thank you for your payment Kuya/Ate! See you on December 18.</li>
+                                         </ul>
+                                         @else
+                                         <ul>
+                                             <li>Comeback here to see if your payment has been verified after you paid your ticket.</li>
+                                         </ul>
+                                         @endif
+                                        
+                                 </div>
+
                             </div>
                         </div>
                     </div>
