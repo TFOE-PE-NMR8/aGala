@@ -150,7 +150,7 @@ class RegistrationController extends Controller
         $msg = "Please pay the amount through our selected payment options";
         Mail::to($registrant->email)->send(new TicketNotification($registration, $subjectMsg, $msg));
 
-        $slack = SlackChat::message('#agala-registration', ":bangbang: Kuya/Ate <https://agala.devbroph.com/registered/{$registration->reference_number}|{$registrant->first_name}> from *{$registrant->club}* is now registered on our Database, number of guest is *{$guest_count}*, with the reference number: {$registration->reference_number} :bangbang: <!here>");
+        $slack = SlackChat::message('#agala-registration', ":bangbang: Kuya/Ate *<https://agala.devbroph.com/registered/{$registration->reference_number}|{$registrant->first_name} {$registrant->last_name}>* from *{$registrant->club}* is now registered on our Database, number of guest is *{$guest_count}*, with the reference number: {$registration->reference_number} :bangbang: <!here>");
         // dd(SlackUser::lists());
         // dd($slack);
 
