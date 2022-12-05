@@ -94,7 +94,7 @@ class RegistrantController extends Controller
         $orderBy = $request->input('dir');
         $searchValue = $request->input('search');
 
-        $data = Registrant::with(['guests', 'registration'])->paginate($length);
+        $data = Registrant::with(['guests', 'registration'])->paginate(2000);
 
         return response()->json($data);
     }
