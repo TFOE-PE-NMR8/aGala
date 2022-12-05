@@ -32,6 +32,9 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/registrants', [App\Http\Controllers\RegistrantController::class, 'index'])->name('registrants');
     Route::get('/guests', [App\Http\Controllers\GuestController::class, 'index'])->name('guests');
     Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
+    Route::get('/attendance', [App\Http\Controllers\AttendanceController::class, 'index'])->name('attendance');
+    Route::get('/scanQr/{qr_code}', [App\Http\Controllers\AttendanceController::class, 'scanQr'])->name('scanQr');
+    Route::post('/attend/{status}/{id}', [App\Http\Controllers\AttendanceController::class, 'attend'])->name('attend');
 });
 
 
