@@ -30,6 +30,7 @@ Auth::routes();
 Route::group(['middleware' => 'auth'], function(){
     Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
     Route::get('/registrants', [App\Http\Controllers\RegistrantController::class, 'index'])->name('registrants');
+    Route::get('/payment-logs', [App\Http\Controllers\PaymentLogController::class, 'index'])->name('payment_logs');
     Route::get('/guests', [App\Http\Controllers\GuestController::class, 'index'])->name('guests');
     Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
     Route::get('/raffle', [App\Http\Controllers\RaffleController::class, 'index']);

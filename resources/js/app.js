@@ -58,6 +58,7 @@ import RegistrationForm from './components/RegistrationForm.vue';
 import RegistrationButton from './components/RegisteredButton.vue';
 import RegistrantsTable from "./components/registrants/RegistrantsTable.vue";
 import GuestsTable from "./components/guests/GuestsTable.vue";
+import PaymentLogTable from "./components/paymentLogs/PaymentLogTable.vue";
 
 app.component('example-component', ExampleComponent);
 app.component('Datepicker', Datepicker);
@@ -65,6 +66,7 @@ app.component('registration-form', RegistrationForm);
 app.component('registered-button', RegistrationButton);
 app.component('registrants-table', RegistrantsTable)
 app.component('guests-table', GuestsTable)
+app.component('payment-logs-table', PaymentLogTable)
 
 /**
  * The following block of code may be used to automatically register your
