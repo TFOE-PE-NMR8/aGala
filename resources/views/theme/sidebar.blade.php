@@ -26,6 +26,12 @@
                 <span>Raffle</span>
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="{{ URL::to('/attendance') }}">
+                <i class="bi bi-arrow-repeat"></i>
+                <span>Attendance</span>
+            </a>
+        </li>
     </ul>
 
 </aside><!-- End Sidebar-->
