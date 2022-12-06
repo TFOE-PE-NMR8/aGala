@@ -21,64 +21,23 @@ spec:
             - /bin/bash
             - -c
           args:
-            - composer install && php artisan migrate && php artisan db:seed && php-fpm -y /usr/local/etc/php-fpm.conf -R
+            - cd /app && composer install && php artisan migrate && php artisan db:seed && chown -R www-data:www-data /app/storage && a2enmod rewrite && service apache2 restart && sleep infinity
           env:
-            - name: APP_NAME
-              value: "AGala Dev"
-            - name: APP_ENV
-              value: local
-            - name: APP_KEY
-              value: "base64:Z2Zpd2puNDlybm5heDhyd3h6c25wdjF0bTlmN2ZhbGs="
-            - name: APP_DEBUG
-              value: "true"
-            - name: APP_URL
-              value: "http://agala.test"
-            - name: LOG_CHANNEL
-              value: "stack"
-            - name: LOG_DEPRECATIONS_CHANNEL
-              value: "null"
-            - name: LOG_LEVEL
-              value: "debug"
-            - name: DB_CONNECTION
-              value: "mysql"
-            - name: DB_HOST
-              value: "143.198.86.80"
-            - name: DB_PORT
-              value: "3306"
-            - name: DB_DATABASE
-              value: "agala_staging"
-            - name: DB_USERNAME
-              value: "smsuserdb"
-            - name: DB_PASSWORD
-              value: "Sm3send564!!"
-            - name: MAIL_MAILER
-              value: "smtp"
-            - name: MAIL_HOST
-              value: "smtp.office365.com"
-            - name: MAIL_PORT
-              value: "587"
-            - name: MAIL_USERNAME
-              value: "koneb2013@hotmail.com"
-            - name: MAIL_PASSWORD
-              value: "qmtqqvnihasqwdfa"
-            - name: MAIL_ENCRYPTION
-              value: ""
-            - name: MAIL_FROM_ADDRESS
-              value: "koneb2013@hotmail.com"
-            - name: MAIL_FROM_NAME
-              value: "AGala Dev"
-          image: neiellcare71/composer:latest
-          imagePullPolicy: IfNotPresent
+          image: neiellcare71/agala:latest
+          imagePullPolicy: Always
           name: agala-staging
           ports:
             - containerPort: 80
               name: agala-staging
               protocol: TCP
           volumeMounts:
-            - mountPath: /var/www
+            - mountPath: /app
               name: app
             - mountPath: /root/.ssh
               name: id-rsa
+            - name: agala-env
+              mountPath: /app/.env
+              subPath: env
       hostname: agala-staging
       initContainers:
         - args:
@@ -110,6 +69,9 @@ spec:
       volumes:
         - emptyDir: {}
           name: app
+        - name: agala-env
+          configMap:
+            name: agala-env
         - name: id-rsa
           secret:
             defaultMode: 384
@@ -118,7 +80,8 @@ spec:
                 path: id_rsa
               - key: known_hosts
                 path: known_hosts
-            secretName: agala-rsa
+            secretName: neiell-test
+#            secretName: agala-rsa
 ---
 apiVersion: v1
 kind: Service
@@ -133,4 +96,3 @@ spec:
     - name: agala-staging
       protocol: TCP
       port: 80
-      targetPort: 80
