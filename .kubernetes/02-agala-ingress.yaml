@@ -1,0 +1,33 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: agala-staging
+  namespace: default
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/proxy-body-size: 10000m
+    ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      add_header Content-Security-Policy "upgrade-insecure-requests;";
+      add_header X-Cache HIT;
+      add_header X-Cache-Hits 1;
+      add_header X-Cacheable YES;
+      add_header X-Frame-Options SAMEORIGIN;
+      add_header X-Content-Type-Options nosniff;
+      add_header X-XSS-Protection 1;
+spec:
+  tls:
+    - hosts:
+        - agala.lab.braathe.group
+      secretName: agala.lab.braathe.group-tls
+  rules:
+    - host: agala.lab.braathe.group
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: agala-staging
+                port:
+                  number: 80

@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Registration;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +16,27 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $total = Registration::whereColumn('total_amount', 'paid_amount')->sum('quantity');
+    return view('index')->with('total_guests', $total);
+});
+
+Route::get('/registration', [App\Http\Controllers\RegistrationController::class, 'registration'])->name('registration');
+Route::post('/registration', [App\Http\Controllers\RegistrationController::class, 'register'])->name('register');
+Route::get('/registered/{reference_number}', [App\Http\Controllers\RegistrationController::class, 'registered'])->name('registered');
+Route::get('/registered/{id}/dlqr', [App\Http\Controllers\RegistrationController::class, 'dowloadQRCode']);
+
+Auth::routes();
+
+Route::group(['middleware' => 'auth'], function(){
+    Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/registrants', [App\Http\Controllers\RegistrantController::class, 'index'])->name('registrants');
+    Route::get('/payment-logs', [App\Http\Controllers\PaymentLogController::class, 'index'])->name('payment_logs');
+    Route::get('/guests', [App\Http\Controllers\GuestController::class, 'index'])->name('guests');
+    Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
+    Route::get('/raffle', [App\Http\Controllers\RaffleController::class, 'index']);
+    Route::post('/raffle/winner', [App\Http\Controllers\RaffleController::class, 'update']);
+    Route::get('/raffle/raffle-100', [App\Http\Controllers\RaffleController::class, 'raffle_100']);
+    Route::get('/raffle/raffle-main', [App\Http\Controllers\RaffleController::class, 'raffle_main']);
+    Route::get('/raffle/raffle-main-generate', [App\Http\Controllers\RaffleController::class, 'generate_main_entry']);
+    Route::get('/raffle/raffle-100-generate', [App\Http\Controllers\RaffleController::class, 'generate_100_entry']);
 });
