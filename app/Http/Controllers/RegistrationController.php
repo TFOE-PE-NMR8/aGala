@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Vluzrmos\SlackApi\Facades\SlackChat;
+use Vluzrmos\SlackApi\Facades\SlackUser;
 
 class RegistrationController extends Controller
 {
@@ -134,7 +136,7 @@ class RegistrationController extends Controller
         while(Registration::where('reference_number', $reference_number)->count() > 0) {
             $reference_number = "AG{$year_now}-" . rand(1000,9999);
         }
-
+        $guest_count = count($guests);
         $quantity = 1 + count($guests);
         $registration = new Registration();
         $registration->reference_number = $reference_number;
@@ -147,6 +149,14 @@ class RegistrationController extends Controller
         $subjectMsg = "Thank you for registering to the aGala";
         $msg = "Please pay the amount through our selected payment options";
         Mail::to($registrant->email)->send(new TicketNotification($registration, $subjectMsg, $msg));
+
+        if(env('APP_ENV') == 'local'){
+            $slack = SlackChat::message('#test-reg', ":bangbang: Kuya/Ate *<https://agala.devbroph.com/registered/{$registration->reference_number}|{$registrant->first_name} {$registrant->last_name}>* from *{$registrant->club}* is now registered on our Database, number of guest is *{$guest_count}*, with the reference number: {$registration->reference_number} :bangbang: <!here>");
+
+        }else{
+            $slack = SlackChat::message('#agala-registration', ":bangbang: Kuya/Ate *<https://agala.devbroph.com/registered/{$registration->reference_number}|{$registrant->first_name} {$registrant->last_name}>* from *{$registrant->club}* is now registered on our Database, number of guest is *{$guest_count}*, with the reference number: {$registration->reference_number} :bangbang: <!here>");
+
+        }
 
         return response()->json(['redirect' => route('registered', ['reference_number' => $reference_number])]);
     }
