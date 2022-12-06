@@ -67,7 +67,7 @@ spec:
               value: "koneb2013@hotmail.com"
             - name: MAIL_FROM_NAME
               value: "AGala Dev"
-          image: agala/composer:latest
+          image: neiellcare71/composer:latest
           imagePullPolicy: IfNotPresent
           name: agala-staging
           ports:
