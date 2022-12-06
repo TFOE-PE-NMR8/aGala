@@ -21,7 +21,7 @@ spec:
             - /bin/bash
             - -c
           args:
-            - cp .docker/php/php.ini /usr/local/etc/php/conf.d/local.ini && composer install && php artisan migrate && php artisan db:seed && php-fpm -y /usr/local/etc/php-fpm.conf -R
+            - composer install && php artisan migrate && php artisan db:seed && php-fpm -y /usr/local/etc/php-fpm.conf -R
           env:
             - name: APP_NAME
               value: "AGala Dev"
@@ -98,7 +98,7 @@ spec:
         - args:
             - cd /app && npm install && npm run development
           command:
-            - /bin/bash
+            - /bin/sh
             - -c
           image: node:latest
           imagePullPolicy: IfNotPresent
@@ -118,7 +118,7 @@ spec:
                 path: id_rsa
               - key: known_hosts
                 path: known_hosts
-            secretName: neiell-test
+            secretName: agala-rsa
 ---
 apiVersion: v1
 kind: Service
