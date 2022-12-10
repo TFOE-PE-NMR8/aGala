@@ -17,11 +17,11 @@ class PaymentLog extends Model
         'date'
     ];
 
-    public function registrant(){
-        return $this->belongsTo(Registrant::class);
+    public function registration(){
+        return $this->belongsTo(Registration::class, 'registration_id')->with('registrant');
     }
 
-    public function registration(){
-        return $this->belongsTo(Registration::class);
+    public function agent(){
+        return $this->belongsTo(User::class, 'paid_user_id');
     }
 }

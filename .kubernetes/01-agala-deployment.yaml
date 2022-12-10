@@ -20,56 +20,11 @@ spec:
         - command:
             - /bin/bash
             - -c
-            - cp
+          args:
+            - cd /app && composer install && php artisan migrate && php artisan db:seed && chown -R www-data:www-data /app/storage && a2enmod rewrite && service apache2 restart && sleep infinity
           env:
-            - name: SMTP_USERNAME
-              value: bgr.cap
-            - name: SMTP_PASSWORD
-              value: '%sj&sVOuFyvD'
-            - name: DB_DRIVER
-              value: mysql
-            - name: DB_CONNECTION
-              value: mysql
-            - name: DB_HOST
-              value: dblab.braathe.group
-            - name: DB_PORT
-              value: "34632"
-            - name: DB_DATABASE
-              value: p5lab
-            - name: DB_USERNAME
-              value: v3r1ty
-            - name: DB_PASSWORD
-              value: UT@Vh@LEV!RbuTruW
-            - name: BRAATHE_DBHOST
-              value: dblab.braathe.group
-            - name: BRAATHE_DBPORT
-              value: "34632"
-            - name: BRAATHE_DBNAME
-              value: p5lab
-            - name: BRAATHE_DBUSER
-              value: v3r1ty
-            - name: BRAATHE_DBPASS
-              value: UT@Vh@LEV!RbuTruW
-            - name: DB_JSON_HOST
-              value: dblab.braathe.group
-            - name: DB_JSON_DATABASE
-              value: jsonlab
-            - name: DB_JSON_USERNAME
-              value: v3r1ty
-            - name: DB_JSON_PASSWORD
-              value: UT@Vh@LEV!RbuTruW
-            - name: BETA
-              value: "True"
-            - name: MASTER_KEY
-              value: tc9pGKtseVkcbOWlgfB3lvSNEYeg00KsPhR1p6f0LWduEILMPQ2EFofhJiwHXn61hW63kRC9d3Feg4B2UZ0AnQ==
-            - name: P2BRAATHE_COSMOS_KEY
-              value: cSx0xGdNMcmjX9xOwkrW89M3X2lIrHbbyeH72BWAmnibskKTrD8MSMZh9rF2IBP7m5iLsOMMgjr4EiTlhLwYKQ==
-            - name: EMAIL_TO
-              value: ane.aasen@braathe.no
-            - name: LOG_RUNTIME
-              value: "1"
-          image: agala/php:latest
-          imagePullPolicy: IfNotPresent
+          image: neiellcare71/agala:latest
+          imagePullPolicy: Always
           name: agala-staging
           ports:
             - containerPort: 80
@@ -80,10 +35,13 @@ spec:
               name: app
             - mountPath: /root/.ssh
               name: id-rsa
+            - name: agala-env
+              mountPath: /app/.env
+              subPath: env
       hostname: agala-staging
       initContainers:
         - args:
-            - find /app -mindepth 1 -delete; git clone -b agala-staging --depth=1 --single-branch
+            - find /app -mindepth 1 -delete; git clone -b develop --depth=1 --single-branch
               git@github.com:TFOE-PE-NMR8/aGala.git /app
           command:
             - /bin/sh
@@ -107,30 +65,23 @@ spec:
           volumeMounts:
             - mountPath: /app
               name: app
-        - args:
-            - cd /app && npm install && npm run development
-          command:
-            - /bin/sh
-            - -c
-          image: node:latest
-          imagePullPolicy: IfNotPresent
-          name: npm
-          volumeMounts:
-            - mountPath: /app
-              name: app
       restartPolicy: Always
       volumes:
         - emptyDir: {}
           name: app
+        - name: agala-env
+          configMap:
+            name: agala-env
         - name: id-rsa
           secret:
             defaultMode: 384
             items:
-              - key: Neiell_rsa
+              - key: id_rsa
                 path: id_rsa
               - key: known_hosts
                 path: known_hosts
             secretName: neiell-test
+#            secretName: agala-rsa
 ---
 apiVersion: v1
 kind: Service
@@ -145,4 +96,3 @@ spec:
     - name: agala-staging
       protocol: TCP
       port: 80
-      targetPort: 80

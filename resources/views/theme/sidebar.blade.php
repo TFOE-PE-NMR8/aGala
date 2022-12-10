@@ -7,13 +7,19 @@
                 <i class="bi bi-grid"></i>
                 <span>Dashboard</span>
             </a>
-        </li><!-- End Dashboard Nav -->
+        </li>
         <li class="nav-item">
             <a class="nav-link collapsed" href="/registrants">
                 <i class="bi bi-people"></i>
                 <span>Registrants</span>
             </a>
-        </li><!-- End Dashboard Nav -->
+        </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="/payment-logs">
+                <i class="bi bi-stack"></i>
+                <span>Payment Logs</span>
+            </a>
+        </li>
         <li class="nav-item">
             <a class="nav-link collapsed" href="/raffle">
                 <i class="bi bi-arrow-repeat"></i>

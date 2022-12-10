@@ -278,16 +278,13 @@
 <script>
 import $ from 'jquery';
 
-// import PaidModal from './PaidModal';
 import Modal from '../Modal'
-import Options from "../../../../public/theme/vendor/chart.js/docs/general/options.html";
 
 export default {
     props: {
         url: String,
     },
     components: {
-        Options,
         Modal
     },
   computed: {

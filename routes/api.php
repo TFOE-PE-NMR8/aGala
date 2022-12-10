@@ -42,6 +42,12 @@ Route::group(['middleware' => 'auth'], function(){
             Route::get('/', [\App\Http\Controllers\GuestController::class, 'getGuestsDataTable'])->name('api.guests.datatable');
         });
     });
+    Route::group(['prefix' => 'payment-logs'], function(){
+        Route::group(['prefix' => 'data'], function(){
+            //URL: api/payment-logs/data
+            Route::get('/', [\App\Http\Controllers\PaymentLogController::class, 'log_data'])->name('api.payload_logs.data');
+        });
+    });
 });
 
 
