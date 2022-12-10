@@ -48,6 +48,20 @@
                                     @click="viewPaid(item, i)">
                                     Pay
                                 </button>
+                                &nbsp;
+                                <button
+                                    type="button"
+                                    class="btn btn-info btn-sm"
+                                    @click="viewAttendance(item, i)">
+                                    Attendance
+                                </button>
+                                <!-- &nbsp;
+                                <button
+                                    type="button"
+                                    class="btn btn-warning btn-sm"
+                                    @click="editAndDelete(item, i)">
+                                    Edit
+                                </button> -->
                             </td>
                             <!--                    <td class="showData">-->
                             <!--                        <i class="fas fa-angle-down"></i>-->
@@ -106,6 +120,159 @@
             </template>
         </modal>
     </Teleport>
+
+    <Teleport to="body">
+        <!-- use the modal component, pass in the prop -->
+        <modal :show="showModalAttendance"
+               @close="showModalAttendance = false"
+        >
+            <template #header>
+                <button type="button" class="btn btn-primary">Edit</button>
+                <button type="button" class="btn btn-success">Pay</button>
+            </template>
+            <template #body>
+                <h5 class="modal-title">Registrant Name: {{ registrant.registration.reference_number }}: {{ registrant.first_name }} {{ registrant.last_name}}</h5>
+                <h5 class="modal-title">Total Amount: ₱ {{ registrant.registration.total_amount }}</h5>
+                <h5 class="modal-title">Paid Amount: ₱ {{ registrant.registration.paid_amount }}</h5>
+                <h5 class="modal-title">Balance Amount: ₱ {{ balance }}.00</h5>
+                <table class="table table-separate table-head-custom dataTable no-footer dtr-inline table-hover mt-4"
+                        id="data-table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Relation</th>
+                        <th scope="col">Action</th>
+                        <!--                    <th></th>-->
+                    </tr>
+                    </thead>
+                    <tbody v-if="guests.length">
+
+                        <tr v-for="(guest, i) in guests" :key="guest.id">
+                            <td class="text-capitalize">
+                                
+                                <div v-if="guest.name">
+                                    {{ guest.name }}
+                                </div>
+                                <div v-else>
+                                    {{ guest.first_name }} {{ guest.last_name }}
+                                </div>
+                            </td>
+                            <td>
+                                <div v-if="guest.name">
+                                    Guest
+                                </div>
+                                <div v-else>
+                                    Registrant
+                                </div>
+                            </td>
+                            <td>
+                                <div v-if="guest.name">
+                                    {{ guest.relation  }}
+                                </div>
+                                <div v-else>
+                                    N/A
+                                </div>
+                            </td>
+                            <td>
+                                <div v-if="(i+1 <= countNotYetPaid)"> 
+                                    <button
+                                        v-if="(guest.is_attend != 'Attend')"
+                                        type="button"
+                                        class="btn btn-primary btn-sm"
+                                        @click="attendance(guest, i, passItem)">
+                                        Attend
+                                    </button>
+                                    <button
+                                        v-else
+                                        type="button"
+                                        class="btn btn-success btn-sm">
+                                        Attended
+                                    </button>
+                                </div>
+                                <div v-else>
+                                    <button
+                                        type="button"
+                                        class="btn btn-warning btn-sm">
+                                        Not Yet Paid
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </template>
+            <template #footer>
+                <button
+                    class="btn btn-secondary"
+                    @click="showModalAttendance = false"
+                >Close
+                </button>
+                <!-- <button v-if="!enableButton"
+                        class="btn btn-primary ms-2 disabled"  disabled>Save
+                </button>
+                <button v-if="enableButton"
+                    class="btn btn-primary ms-2"
+                    @click="savePaidData"
+                >Save
+                </button> -->
+            </template>
+        </modal>
+    </Teleport>
+
+    <!-- <Teleport to="body">
+        <modal :show="showModalEditDelete"
+               @close="showModalEditDelete = false"
+        >
+            <template #header>
+            </template>
+            <template #body>
+                <h5 class="modal-title">Registrant Name: {{ registrant.registration.reference_number }}: {{ registrant.first_name }} {{ registrant.last_name}}</h5>
+                <form>
+                    <table class="table table-separate table-head-custom dataTable no-footer dtr-inline table-hover mt-4"
+                        id="data-table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody v-if="guestAndRegistrants.length">
+
+                        <tr v-for="(guestAndRegistrant, index) in guestAndRegistrants" :key="guestAndRegistrant.id">
+                            <td class="text-capitalize">
+                                <div v-if="guestAndRegistrant.name">
+                                    <input type="text" class="form-control" v-bind:value="guestAndRegistrant.id"  required>
+                                    <input type="text" class="form-control" v-model="dataForm.guestName[index]" required v-bind:placeholder="guestAndRegistrant.name" style="width:60%">
+                                </div>
+                                <div v-else style="display: flex;">
+                                    <input type="text" class="form-control" v-model="dataForm.registrant_id" required>
+                                    <input type="text" class="form-control" v-model="dataForm.first_name" required v-bind:placeholder="guestAndRegistrant.first_name" style="width:50%;">&nbsp;&nbsp; <input type="text" class="form-control" v-model="dataForm.last_name" v-bind:placeholder="guestAndRegistrant.last_name" style="width:50%;">
+                                </div>
+                            </td>
+                            <td>
+                                {{index}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                </form>
+            </template>
+            <template #footer>
+                <button
+                    class="btn btn-secondary"
+                    @click="showModalEditDelete = false"
+                >Close
+                </button>
+                <button 
+                    class="btn btn-primary ms-2"
+                    @click="saveChanges"
+                >Save
+                </button>
+            </template>
+        </modal>
+    </Teleport> -->
 </template>
 
 <script>
@@ -164,8 +331,15 @@ export default {
     data() {
         return {
             items: [],
+            passItem: [],
+            passItemEdit: [],
             registrant: null,
+            registrantEdit: null,
+            guests: [],
+            guestAndRegistrants: [],
             showModal: false,
+            showModalAttendance: false,
+            // showModalEditDelete: false,
             max_amount: 0,
             current_index: 0,
             data: {
@@ -174,7 +348,16 @@ export default {
                 payment_method: "gcash",
                 registration_id: ""
             },
-            disable: false
+            dataForm: {
+                first_name: "",
+                last_name: "",
+                registrant_id: "",
+                guestId: [],
+                guestName: [],
+            },
+            disable: false,
+            countNotYetPaid: null,
+            balance: null, 
         }
     },
     async mounted() {
@@ -247,7 +430,71 @@ export default {
         },
         getDateTimeFormat(value){
 
-        }
+        },
+        viewAttendance(item) {
+            // console.log(item.registration.reference_number);
+            this.guests = [];
+
+            axios.post("/api/registration/registrant_guest/", {qr_code: item.registration.reference_number,
+                item: item,
+                })
+                .then(async response => {
+                    this.guests = response.data;
+                })
+                .catch(error => {
+                    console.log(error)
+                });
+
+            console.log(this.guests);   
+            this.passItem = item;
+            this.registrant = item;
+            this.balance = item.registration.total_amount - item.registration.paid_amount;
+            this.countNotYetPaid = item.registration.paid_amount / 500;
+            this.resetData();
+            this.data.registration_id = item.registration.id;
+            this.max_amount = item.registration.total_amount - item.registration.paid_amount;
+            this.showModalAttendance = true;
+        },
+        attendance(guest, i, passItem) {
+           
+            axios.post("/api/registration/attendance", guest)
+                .then(async response => {
+                    this.showModalAttendance = true;
+                    // console.log(passItem);
+                    // await this.getRegistrants();
+                    this.viewAttendance(passItem);
+                })
+                .catch(error => {
+                    console.log(error)
+                });
+        },
+        // editAndDelete(item, index) {
+        //     this.guestAndRegistrants = [];
+            
+        //     axios.post("/api/registration/registrant_guest/", {qr_code: item.registration.reference_number,
+        //         item: item,
+        //         })
+        //         .then(async response => {
+        //             // console.log(response.data);
+        //             this.guestAndRegistrants = response.data;
+        //             console.log(this.guestAndRegistrants);
+        //         })
+        //         .catch(error => {
+        //             console.log(error)
+        //         });
+            
+        //     this.passItem = item;
+        //     this.registrant = item;
+        //     this.balance = item.registration.total_amount - item.registration.paid_amount;
+        //     this.countNotYetPaid = item.registration.paid_amount / 500;
+        //     // console.log(item.registration.reference_number);
+
+        //     this.showModalEditDelete = true;
+        // },
+        // saveChanges () {
+        //     console.log(this.dataForm);
+        // },
+
     }
 }
 </script>
