@@ -25,21 +25,32 @@ class AttendanceController extends Controller
             ->select('registrations.*', 'registrants.first_name', 'registrants.last_name', 'registrants.title', 'registrants.club', 'registrants.marital_status', 'registrants.is_attend')
             ->first();
 
-        $balance = $getRegistrant->total_amount - $getRegistrant->paid_amount; 
-        $countNotYetPaid = $getRegistrant->paid_amount / 500;
-        $countNotYetPaid = intval($countNotYetPaid);
-        #Get the Registrant Guest
-        $getRegistrantGuest = Guest::where('guests.registrant_id', $getRegistrant->id)->get();
-            
-        $arrayRegistrantAndGuest = [];
-        $arrayRegistrantAndGuest[] = $getRegistrant;
-        for ($i = 0; $i < count($getRegistrantGuest); $i++)
-        {
-            $arrayRegistrantAndGuest[] = $getRegistrantGuest[$i];
+        $ifItHasData = "";
+        if ($getRegistrant) {
+            $ifItHasData = "Has Data";
+            $balance = $getRegistrant->total_amount - $getRegistrant->paid_amount; 
+            $countNotYetPaid = $getRegistrant->paid_amount / 500;
+            $countNotYetPaid = intval($countNotYetPaid);
+            #Get the Registrant Guest
+            $getRegistrantGuest = Guest::where('guests.registrant_id', $getRegistrant->id)->get();
+                
+            $arrayRegistrantAndGuest = [];
+            $arrayRegistrantAndGuest[] = $getRegistrant;
+            for ($i = 0; $i < count($getRegistrantGuest); $i++)
+            {
+                $arrayRegistrantAndGuest[] = $getRegistrantGuest[$i];
+            }
+        } else {
+            $ifItHasData = "No Data";
         }
 
-      
-        return view('attendance.viewRegistrantAndGuest', compact('getRegistrant', 'getRegistrantGuest', 'balance', 'countNotYetPaid', 'arrayRegistrantAndGuest'));
+        if ($ifItHasData == "No Data") {
+            return redirect()->back()->with("warning", "The Reference number you entered does not exist, Thank you!");
+        } else {
+            return view('attendance.viewRegAndGuest', compact('getRegistrant', 'getRegistrantGuest', 'balance', 'countNotYetPaid', 'arrayRegistrantAndGuest', 'ifItHasData'));
+        }
+        
+        // return view('attendance.viewRegistrantAndGuest', compact('getRegistrant', 'getRegistrantGuest', 'balance', 'countNotYetPaid', 'arrayRegistrantAndGuest', 'ifItHasData'));
 
     }
 
@@ -47,7 +58,7 @@ class AttendanceController extends Controller
     {
         if ($status == "Registrant") {
             $getRegistrant = Registrant::where('id', $id)->first();
-            $getRegistrantRegistrations = Registration::where('id', $getRegistrant->id)->first();
+            $getRegistrantRegistrations = Registration::where('registrant_id', $getRegistrant->id)->first();
 
             $newAttendance = new Attendance();
             $newAttendance->status = $status;
@@ -65,7 +76,7 @@ class AttendanceController extends Controller
 
             $getGuest = Guest::where('id', $id)->first();
             $getRegistrant = Registrant::where('id', $getGuest->registrant_id)->first();
-            $getRegistrantRegistrations = Registration::where('id', $getRegistrant->id)->first();
+            $getRegistrantRegistrations = Registration::where('registrant_id', $getRegistrant->id)->first();
             $newAttendance = new Attendance();
             $newAttendance->status = $status;
             $newAttendance->registrant_id = $getRegistrant->id;
@@ -81,5 +92,71 @@ class AttendanceController extends Controller
                 ->update($data);
         }
         return redirect()->back()->with('success', 'Successfull! Thank You For Attending The Event');
+    }
+
+    public function attendance (Request $request) 
+    {
+        if ($request->title){
+
+            $getRegistrantRegistrations = Registration::where('registrant_id', $request->id)->first();
+            $newAttendance = new Attendance();
+            $newAttendance->status = "Registrant";
+            $newAttendance->registrant_id = $request->id;
+            $newAttendance->paid_updated = $getRegistrantRegistrations->updated_at;
+            $newAttendance->save();
+
+            $data1 = array();
+            $data1['is_attend'] = "Attend";
+
+            DB::table('registrants')
+                ->where('id', $request->id)
+                ->update($data1);
+            
+            $data3 = ["Registrant", "Ni"];
+            return response()->json($newAttendance, 200); 
+        } else {
+            $getRegistrant = Registrant::where('id', $request->registrant_id)->first();
+            $getRegistrantRegistrations = Registration::where('registrant_id', $getRegistrant->id)->first();
+
+            $newAttendance = new Attendance();
+            $newAttendance->status = "Guest";
+            $newAttendance->registrant_id = $getRegistrant->id;
+            $newAttendance->guest_id = $request->id;
+            $newAttendance->paid_updated = $getRegistrantRegistrations->updated_at;
+            $newAttendance->save();
+
+            $data = array();
+            $data['is_attend'] = "Attend";
+
+            DB::table('guests')
+                ->where('id', $request->id)
+                ->update($data);
+
+            $data = ["Guest", "Ni"];
+            return response()->json($data, 200); 
+        }   
+    }
+
+    public function registrant_guest(Request $request) 
+    {
+        $getRegistrant = Registration::join('registrants', 'registrants.id', 'registrations.id')
+            ->where('registrations.reference_number', $request->qr_code)
+            ->select('registrations.*', 'registrants.first_name', 'registrants.last_name', 'registrants.title', 'registrants.club', 'registrants.marital_status', 'registrants.is_attend')
+            ->first();
+
+        $balance = $getRegistrant->total_amount - $getRegistrant->paid_amount; 
+        $countNotYetPaid = $getRegistrant->paid_amount / 500;
+        $countNotYetPaid = intval($countNotYetPaid);
+        #Get the Registrant Guest
+        $getRegistrantGuest = Guest::where('guests.registrant_id', $getRegistrant->id)->get();
+            
+        $arrayRegistrantAndGuest = [];
+        $arrayRegistrantAndGuest[] = $getRegistrant;
+        for ($i = 0; $i < count($getRegistrantGuest); $i++)
+        {
+            $arrayRegistrantAndGuest[] = $getRegistrantGuest[$i];
+        }
+
+        return response()->json($arrayRegistrantAndGuest, 200); 
     }
 }
