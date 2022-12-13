@@ -22,7 +22,7 @@
             </div>
             <div class="col-md-6">
               <div class="form-floating">
-                <input v-model="form.email" type="email" class="form-control" id="email" placeholder="Your Email" required>
+                <input v-model="form.email" type="email" class="form-control" id="email" placeholder="Your Email">
                 <label for="email">Your Email</label>
               </div>
             </div>
