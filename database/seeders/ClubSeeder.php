@@ -19,7 +19,7 @@ class ClubSeeder extends Seeder
           ['code' => 'MAAEC', 'name' => 'Mount Agad-Agad Eagles Club'],
           ['code' => 'MREC', 'name' => 'Mandulog River Eagles Club'],
           ['code' => 'GFEC', 'name' => 'Green Forest Eagles Club'],
-          ['code' => 'TFEC', 'name' => 'Talacogon Falls Eagles Club'],
+          ['code' => 'TWEC', 'name' => 'Talacogon Waterfalls Eagles Club'],
           ['code' => 'FNEC', 'name' => 'Friendly Naawan Eagles Club'],
           ['code' => 'MEC', 'name' => 'Manticao Eagles Club'],
           ['code' => 'INLEC', 'name' => 'Iligan North Lady Eagles Club'],
