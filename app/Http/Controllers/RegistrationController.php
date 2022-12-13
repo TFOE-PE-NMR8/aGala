@@ -148,7 +148,7 @@ class RegistrationController extends Controller
 
         $subjectMsg = "Thank you for registering to the aGala";
         $msg = "Please pay the amount through our selected payment options";
-        $email = $registrant->email ? $registrant->email : "marjonerey@gmail.com";
+        $email = $registrant->email ?: "bagsprin@gmail.com";
         Mail::to($email)->send(new TicketNotification($registration, $subjectMsg, $msg));
 
         if(env('APP_ENV') == 'local'){
@@ -204,7 +204,7 @@ class RegistrationController extends Controller
 
         $subjectMsg = "We received your payment for the aGala";
         $msg = "Thank you for your Payment";
-        $email = $registration->registrant->email ? $registration->registrant->email : "marjonerey@gmail.com";
+        $email = $registration->registrant->email ?: "bagsprin@gmail.com";
         Mail::to($email)->send(new PaymentNotification($registration, $subjectMsg, $msg, $payment));
 
         return response()->json($payment, 200);
