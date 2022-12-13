@@ -45,4 +45,5 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/raffle/raffle-main-generate', [App\Http\Controllers\RaffleController::class, 'generate_main_entry']);
     Route::get('/raffle/raffle-100-generate', [App\Http\Controllers\RaffleController::class, 'generate_100_entry']);
 
+    Route::post('/registration/{id}/delete', [App\Http\Controllers\RegistrationController::class, 'delete'])->name('registration.delete');
 });

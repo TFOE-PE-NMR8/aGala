@@ -223,4 +223,16 @@ class RegistrationController extends Controller
             echo $raw_image_string;
         }, 200, $headers);
     }
+
+    public function delete(Request $request, $id){
+        $registration = Registration::find($id);
+        $registrant = Registrant::where('id',$registration->registrant_id);
+        $guests = Guest::where('registrant_id', $registration->registrant_id);
+
+        $registrant->delete();
+        $registration->delete();
+        $guests->delete();
+
+        return response()->json(['redirect' => route('registrants')]);
+    }
 }
