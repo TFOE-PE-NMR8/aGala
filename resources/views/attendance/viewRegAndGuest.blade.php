@@ -86,7 +86,7 @@
                             Attend
                         </button> -->
                     @else
-                        <button type="button" class="btn btn-success btn-attend">
+                        <button type="button" class="btn btn-success">
                             Attended
                         </button>
                     @endif

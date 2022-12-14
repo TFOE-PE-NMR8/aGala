@@ -29,7 +29,7 @@
     <!-- <h5 class="card-title">Special title treatment</h5>
     <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> -->
     <br>
-    <a href="#" class="btn btn-primary card-text" id="scan-qr-code" data-url="{{ URL::to('/scanQr') }}">Scan QR Code</a>
+    <a href="#" class="btn btn-primary card-text m-1" id="scan-qr-code" data-url="{{ URL::to('/scanQr') }}">Scan QR Code</a>
     <a href="#" class="btn btn-primary card-text" id="inp-ref-no" data-url="{{ URL::to('/scanQr') }}">Input Reference Number</a>
   </div>
 </div>

@@ -159,4 +159,28 @@ class AttendanceController extends Controller
 
         return response()->json($arrayRegistrantAndGuest, 200); 
     }
+
+    public function listOfAttend() 
+    {
+        $attendRegistrants = Attendance::join('registrants', 'registrants.id', 'attendances.registrant_id')
+            ->where('status', 'Registrant')
+            ->get();
+        $attendGuest = Attendance::join('registrants', 'registrants.id', 'attendances.registrant_id')
+            ->join('guests', 'guests.id', 'attendances.guest_id')    
+            ->where('status', 'Guest')
+            ->get();
+        $listOfGuest = [];
+
+        for ($i = 0; $i < count($attendRegistrants); $i++)
+        {
+            $listOfGuest[] = $attendRegistrants[$i];
+        }
+
+        for ($i = 0; $i < count($attendGuest); $i++)
+        {
+            $listOfGuest[] = $attendGuest[$i];
+        }
+
+        return view('attendance.listOfAttend', compact('listOfGuest'));
+    }
 }
