@@ -48,12 +48,11 @@
                                     @click="viewPaid(item, i)">
                                     Pay
                                 </button>
-                                &nbsp;
                                 <button
                                     type="button"
-                                    class="btn btn-info btn-sm"
+                                    class="btn ms-2 btn-info btn-sm"
                                     @click="viewAttendance(item, i)">
-                                    Attendance
+                                    <i class="bi bi-eye"></i>
                                 </button>
                                 <!-- &nbsp;
                                 <button
@@ -129,6 +128,7 @@
             <template #header>
                 <button type="button" class="btn btn-primary">Edit</button>
                 <button type="button" class="btn btn-success">Pay</button>
+                <button v-if="(registrant.registration.total_amount - registrant.registration.paid_amount) > 0" type="button" class="btn btn-danger" @click="deleteRegistrant(registrant.registration.id)"><i class="bi bi-trash"></i></button>
             </template>
             <template #body>
                 <h5 class="modal-title">Registrant Name: {{ registrant.registration.reference_number }}: {{ registrant.first_name }} {{ registrant.last_name}}</h5>
@@ -468,6 +468,11 @@ export default {
                     console.log(error)
                 });
         },
+        async deleteRegistrant(id) {
+          if (confirm('Are you sure to delete this registrant?')) {
+            await this.axios.post('/registration/' + id + '/delete');
+          }
+        }
         // editAndDelete(item, index) {
         //     this.guestAndRegistrants = [];
             

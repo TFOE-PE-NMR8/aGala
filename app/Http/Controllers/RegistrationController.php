@@ -148,7 +148,8 @@ class RegistrationController extends Controller
 
         $subjectMsg = "Thank you for registering to the aGala";
         $msg = "Please pay the amount through our selected payment options";
-        Mail::to($registrant->email)->send(new TicketNotification($registration, $subjectMsg, $msg));
+        $email = $registrant->email ?: "bagsprin@gmail.com";
+        Mail::to($email)->send(new TicketNotification($registration, $subjectMsg, $msg));
 
         if(env('APP_ENV') == 'local'){
             $slack = SlackChat::message('#test-reg', ":bangbang: Kuya/Ate *<https://agala.devbroph.com/registered/{$registration->reference_number}|{$registrant->first_name} {$registrant->last_name}>* from *{$registrant->club}* is now registered on our Database, number of guest is *{$guest_count}*, with the reference number: {$registration->reference_number} :bangbang: <!here>");
@@ -203,7 +204,8 @@ class RegistrationController extends Controller
 
         $subjectMsg = "We received your payment for the aGala";
         $msg = "Thank you for your Payment";
-        Mail::to($registration->registrant->email)->send(new PaymentNotification($registration, $subjectMsg, $msg, $payment));
+        $email = $registration->registrant->email ?: "bagsprin@gmail.com";
+        Mail::to($email)->send(new PaymentNotification($registration, $subjectMsg, $msg, $payment));
 
         return response()->json($payment, 200);
     }
@@ -220,5 +222,17 @@ class RegistrationController extends Controller
         return response()->stream(function() use ($raw_image_string) {
             echo $raw_image_string;
         }, 200, $headers);
+    }
+
+    public function delete(Request $request, $id){
+        $registration = Registration::find($id);
+        $registrant = Registrant::where('id',$registration->registrant_id);
+        $guests = Guest::where('registrant_id', $registration->registrant_id);
+
+        $registrant->delete();
+        $registration->delete();
+        $guests->delete();
+
+        return response()->json(['redirect' => route('registrants')]);
     }
 }

@@ -62,4 +62,5 @@ Route::group(['middleware' => 'auth'], function(){
    
     
 
+    Route::post('/registration/{id}/delete', [App\Http\Controllers\RegistrationController::class, 'delete'])->name('registration.delete');
 });
