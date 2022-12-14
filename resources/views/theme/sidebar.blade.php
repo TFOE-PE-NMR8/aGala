@@ -32,6 +32,26 @@
                 <span>Attendance</span>
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="{{ URL::to('/listOfAttend') }}">
+                <i class="bi bi-arrow-repeat"></i>
+                <span>List of Attend</span>
+            </a>
+        </li>
+        @role('admin')
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="{{ URL::to('/list-users') }}">
+                <i class="bi bi-arrow-repeat"></i>
+                <span>Users</span>
+            </a>
+        </li>
+        <!-- <li class="nav-item">
+            <a class="nav-link collapsed" href="{{ URL::to('/list-roles') }}">
+                <i class="bi bi-arrow-repeat"></i>
+                <span>Roles</span>
+            </a>
+        </li> -->
+        @endrole
     </ul>
 
 </aside><!-- End Sidebar-->

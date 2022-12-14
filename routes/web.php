@@ -38,12 +38,29 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/scanQr/{qr_code}', [App\Http\Controllers\AttendanceController::class, 'scanQr'])->name('scanQr');
     Route::post('/attend/{status}/{id}', [App\Http\Controllers\AttendanceController::class, 'attend'])->name('attend');
 
+    Route::get('/listOfAttend', [App\Http\Controllers\AttendanceController::class, 'listOfAttend'])->name('listOfAttend');
+
     Route::get('/raffle', [App\Http\Controllers\RaffleController::class, 'index']);
     Route::post('/raffle/winner', [App\Http\Controllers\RaffleController::class, 'update']);
     Route::get('/raffle/raffle-100', [App\Http\Controllers\RaffleController::class, 'raffle_100']);
     Route::get('/raffle/raffle-main', [App\Http\Controllers\RaffleController::class, 'raffle_main']);
     Route::get('/raffle/raffle-main-generate', [App\Http\Controllers\RaffleController::class, 'generate_main_entry']);
     Route::get('/raffle/raffle-100-generate', [App\Http\Controllers\RaffleController::class, 'generate_100_entry']);
+    
+    Route::group(['middleware' => ['role:admin']],function() { 
+        // Route::resource('users','UsersController'); 
+        Route::get('/list-users', [App\Http\Controllers\UsersController::class, 'index']);   
+        Route::post('/create_users', [App\Http\Controllers\UsersController::class, 'store']);
+        Route::get('/users/{id}/edit', [App\Http\Controllers\UsersController::class, 'edit']);
+        Route::post('/users/{id}/delete', [App\Http\Controllers\UsersController::class, 'delete']);
+        Route::post('/usersEdit/{id}', [App\Http\Controllers\UsersController::class, 'update']);
+    
+    
+        Route::get('/list-roles', [App\Http\Controllers\RolesController::class, 'index']); 
+        Route::post('/create_roles', [App\Http\Controllers\RolesController::class, 'store']);              
+    });
+   
+    
 
     Route::post('/registration/{id}/delete', [App\Http\Controllers\RegistrationController::class, 'delete'])->name('registration.delete');
 });
