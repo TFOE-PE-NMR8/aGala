@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\PaymentNotification;
 use App\Mail\TicketNotification;
+use App\Models\Attendance;
 use App\Models\Club;
 use App\Models\Guest;
 use App\Models\PaymentLog;
@@ -234,5 +235,133 @@ class RegistrationController extends Controller
         $guests->delete();
 
         return response()->json(['redirect' => route('registrants')]);
+    }
+
+    public function manual_register(){
+        return view('registration.manual');
+    }
+
+    public function manual_registration(Request $request){
+
+        $attending = $request->post('attending', false);
+
+        $club = trim($request->post('club'));
+        if($club === "other"){
+            $club = trim($request->post('other_club'));
+        }
+
+        $firstname = trim($request->post('first_name'));
+        $lastname = trim($request->post('last_name'));
+
+        $exists = Registrant::where('first_name', 'LIKE', "%{$firstname}%")
+            ->where('last_name', 'LIKE', "%{$lastname}%")
+            ->exists();
+        if($exists){
+            $reg = Registrant::with('registration')
+                ->where('first_name', 'LIKE', "%{$firstname}%")
+                ->where('last_name', 'LIKE', "%{$lastname}%")
+                ->orderBy('id', 'desc')->first();
+            $request->session()->flash('error', "{$firstname} {$lastname} already registered! Ref# {$reg->registration->reference_number}");
+            return response()->json(['redirect' => route('manual_register')]);
+        }
+
+        $registrant = new Registrant();
+        $registrant->first_name = $firstname;
+        $registrant->last_name = $lastname;
+        $registrant->phone = trim($request->post('phone'));
+        $registrant->email = trim($request->post('email'));
+        $registrant->title = trim($request->post('title'));
+        $registrant->club = $club;
+        $registrant->marital_status = trim($request->post('marital_status'));
+        if($attending){
+            $registrant->is_attend = "Attend";
+        }
+
+        $registrant->save();
+        $registrant_id = $registrant->id;
+
+        $guests = $request->get('guests', null);
+
+        if($guests){
+            foreach ($guests as $guest){
+                $g = new Guest();
+                $g->name = $guest["name"];
+                $g->relation = $guest["relation"];
+                $g->registrant_id = $registrant_id;
+                if($attending){
+                    $g->is_attend = "Attend";
+                }
+                $g->save();
+            }
+        }
+
+        $year_now = Carbon::now()->year;
+        $reference_number = "AG{$year_now}-" . rand(1000,9999);
+        while(Registration::where('reference_number', $reference_number)->count() > 0) {
+            $reference_number = "AG{$year_now}-" . rand(1000,9999);
+        }
+        $guest_count = count($guests);
+        $quantity = 1 + count($guests);
+        $registration = new Registration();
+        $registration->reference_number = $reference_number;
+        $registration->registrant_id = $registrant_id;
+        $registration->quantity = $quantity;
+        $registration->total_amount = $quantity * 500;
+        $registration->save();
+
+        if($request->post('paying', false)){
+            $payment = $request->post('payment', null);
+            if($payment){
+                $amount = floatval($payment['amount']);
+                $registration_id = $registration->id;
+                $payment_date = Carbon::parse($payment['payment_date']);
+                $payment_method = $payment['payment_method'];
+                $date = Carbon::now();
+
+                $user = Auth::user();
+
+                if(!$user){
+                    return response()->json(['redirect' => route('login')]);
+                }
+
+                $user_id = $user->id;
+
+                $registration->paid_amount = floatval($registration->paid_amount) + $amount;
+                $registration->updated_at = $date;
+                $registration->save();
+
+                PaymentLog::create([
+                    'paid_user_id' => $user_id,
+                    'registration_id' => $registration_id,
+                    'amount' => $amount,
+                    'payment_method' => $payment_method,
+                    'date' => $payment_date
+                ]);
+            }
+        }
+
+        if($attending){
+            $newAttendance = new Attendance();
+            $newAttendance->status = 'Registrant';
+            $newAttendance->registrant_id = $registrant_id;
+            $newAttendance->paid_updated = $registration->updated_at;
+            $newAttendance->save();
+            $registrant->load('guests');
+            foreach($registrant->guests as $guest2){
+                $GAttendance = new Attendance();
+                $GAttendance->status = 'Guest';
+                $GAttendance->guest_id = $guest2->id;
+                $GAttendance->paid_updated = $registration->updated_at;
+                $GAttendance->save();
+            }
+        }
+
+        if(env('APP_ENV') == 'local'){
+            $slack = SlackChat::message('#test-reg', ":bangbang: Kuya/Ate *<https://agala.devbroph.com/registered/{$registration->reference_number}|{$registrant->first_name} {$registrant->last_name}>* from *{$registrant->club}* is now registered on our Database, number of guest is *{$guest_count}*, with the reference number: {$registration->reference_number} :bangbang: <!here>");
+        }else{
+            $slack = SlackChat::message('#agala-registration', ":bangbang: Kuya/Ate *<https://agala.devbroph.com/registered/{$registration->reference_number}|{$registrant->first_name} {$registrant->last_name}>* from *{$registrant->club}* is now registered on our Database, number of guest is *{$guest_count}*, with the reference number: {$registration->reference_number} :bangbang: <!here>");
+        }
+        $request->session()->flash('success', "Successfully Registered with reference number: $reference_number");
+        return response()->json(['redirect' => route('manual_register')]);
     }
 }

@@ -63,4 +63,6 @@ Route::group(['middleware' => 'auth'], function(){
     
 
     Route::post('/registration/{id}/delete', [App\Http\Controllers\RegistrationController::class, 'delete'])->name('registration.delete');
+    Route::get('/manual_register', [App\Http\Controllers\RegistrationController::class, 'manual_register'])->name('manual_register');
+    Route::post('/registration/manual', [App\Http\Controllers\RegistrationController::class, 'manual_registration'])->name('manual_registration');
 });
