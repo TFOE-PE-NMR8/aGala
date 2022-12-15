@@ -151,9 +151,10 @@ class RegistrationController extends Controller
         $subjectMsg = "Thank you for registering to the aGala";
         $msg = "Please pay the amount through our selected payment options";
         $email = $registrant->email ?: "bagsprin@gmail.com";
+
         try{
             Mail::to($email)->send(new TicketNotification($registration, $subjectMsg, $msg));
-        }catch(Exception $e){
+        }catch(\Exception $e){
             Log::info("Email Error for {$reference_number}: " . $e->getMessage());
         }
 
@@ -214,7 +215,7 @@ class RegistrationController extends Controller
 
         try{
             Mail::to($email)->send(new PaymentNotification($registration, $subjectMsg, $msg, $payment));
-        }catch(Exception $e){
+        }catch(\Exception $e){
             Log::info("Email Error for {$registration->reference_number}: " . $e->getMessage());
         }
 

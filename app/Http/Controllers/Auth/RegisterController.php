@@ -71,7 +71,7 @@ class RegisterController extends Controller
         if ($data) {
             try{
                 Mail::to($data['email'])->send(new UserRegistration($data['email'], $data['name']));
-            }catch(Exception $e){
+            }catch(\Exception $e){
                 Log::info("Email Error for {$data['email']}: " . $e->getMessage());
             }
         }
