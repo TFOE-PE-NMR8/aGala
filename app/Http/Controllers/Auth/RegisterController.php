@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Mail\PaymentNotification;
 use App\Mail\UserRegistration;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
@@ -67,7 +69,11 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         if ($data) {
-            Mail::to($data['email'])->send(new UserRegistration($data['email'], $data['name']));
+            try{
+                Mail::to($data['email'])->send(new UserRegistration($data['email'], $data['name']));
+            }catch(Exception $e){
+                Log::info("Email Error for {$data['email']}: " . $e->getMessage());
+            }
         }
         return User::create([
             'name' => $data['name'],
