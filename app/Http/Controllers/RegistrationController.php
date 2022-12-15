@@ -12,6 +12,7 @@ use App\Models\Registrant;
 use App\Models\Registration;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -150,7 +151,11 @@ class RegistrationController extends Controller
         $subjectMsg = "Thank you for registering to the aGala";
         $msg = "Please pay the amount through our selected payment options";
         $email = $registrant->email ?: "bagsprin@gmail.com";
-        Mail::to($email)->send(new TicketNotification($registration, $subjectMsg, $msg));
+        try{
+            Mail::to($email)->send(new TicketNotification($registration, $subjectMsg, $msg));
+        }catch(Exception $e){
+            Log::info("Email Error for {$reference_number}: " . $e->getMessage());
+        }
 
         if(env('APP_ENV') == 'local'){
             $slack = SlackChat::message('#test-reg', ":bangbang: Kuya/Ate *<https://agala.devbroph.com/registered/{$registration->reference_number}|{$registrant->first_name} {$registrant->last_name}>* from *{$registrant->club}* is now registered on our Database, number of guest is *{$guest_count}*, with the reference number: {$registration->reference_number} :bangbang: <!here>");
@@ -206,7 +211,12 @@ class RegistrationController extends Controller
         $subjectMsg = "We received your payment for the aGala";
         $msg = "Thank you for your Payment";
         $email = $registration->registrant->email ?: "bagsprin@gmail.com";
-        Mail::to($email)->send(new PaymentNotification($registration, $subjectMsg, $msg, $payment));
+
+        try{
+            Mail::to($email)->send(new PaymentNotification($registration, $subjectMsg, $msg, $payment));
+        }catch(Exception $e){
+            Log::info("Email Error for {$reference_number}: " . $e->getMessage());
+        }
 
         return response()->json($payment, 200);
     }
