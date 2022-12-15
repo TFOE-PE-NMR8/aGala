@@ -215,7 +215,7 @@ class RegistrationController extends Controller
         try{
             Mail::to($email)->send(new PaymentNotification($registration, $subjectMsg, $msg, $payment));
         }catch(Exception $e){
-            Log::info("Email Error for {$reference_number}: " . $e->getMessage());
+            Log::info("Email Error for {$registration->reference_number}: " . $e->getMessage());
         }
 
         return response()->json($payment, 200);
