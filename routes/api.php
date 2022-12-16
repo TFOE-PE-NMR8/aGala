@@ -33,7 +33,7 @@ Route::group(['middleware' => 'auth'], function(){
     //POST URL: api/registration/pay
     Route::post('/registration/pay', [\App\Http\Controllers\RegistrationController::class, 'pay'])->name('api.registration.pay');
     //POST URL: api/registration/attendance
-    Route::post('/registration/registrant_guest', [\App\Http\Controllers\AttendanceController::class, 'registrant_guest'])->name('api.registration.registrant_guest');
+    Route::get('/registration/registrant_guest', [\App\Http\Controllers\AttendanceController::class, 'registrant_guest'])->name('api.registration.registrant_guest');
     Route::post('/registration/attendance', [\App\Http\Controllers\AttendanceController::class, 'attendance'])->name('api.registration.attendance');
 
     Route::group(['prefix' => 'guests'], function(){

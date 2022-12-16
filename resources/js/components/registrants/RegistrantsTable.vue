@@ -435,15 +435,30 @@ export default {
             // console.log(item.registration.reference_number);
             this.guests = [];
 
-            axios.post("/api/registration/registrant_guest/", {qr_code: item.registration.reference_number,
-                item: item,
+            axios.get('/api/registration/registrant_guest', {
+                params: {
+                    qr_code: item.registration.reference_number,
+                    item: item,
+                }
                 })
                 .then(async response => {
+
+                    console.log(response.data)
                     this.guests = response.data;
                 })
                 .catch(error => {
                     console.log(error)
                 });
+
+            // axios.post("/api/registration/registrant_guest", {qr_code: item.registration.reference_number,
+            //     item: item,
+            //     })
+            //     .then(async response => {
+            //         this.guests = response.data;
+            //     })
+            //     .catch(error => {
+            //         console.log(error)
+            //     });
 
             console.log(this.guests);   
             this.passItem = item;

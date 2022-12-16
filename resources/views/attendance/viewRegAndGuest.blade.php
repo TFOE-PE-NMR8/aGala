@@ -6,11 +6,11 @@
 <div class="card text-center">
     <br>
     <h4>Registrant Name: {{ $getRegistrant->first_name }} {{ $getRegistrant->last_name }}</h4>
-    <h4>Total Amount: ₱   {{ $getRegistrant->total_amount }}</h4>
+    <h4>Total Amount: ₱   {{ $getRegistrationId->total_amount }}</h4>
     <h4>
         Paid Amount: 
-        @if ($getRegistrant->paid_amount != null)
-            ₱ {{ $getRegistrant->paid_amount }}
+        @if ($getRegistrationId->paid_amount != null)
+            ₱ {{ $getRegistrationId->paid_amount }}
         @else
             ₱ 0
         @endif
