@@ -152,11 +152,11 @@ class RegistrationController extends Controller
         $msg = "Please pay the amount through our selected payment options";
         $email = $registrant->email ?: "bagsprin@gmail.com";
 
-        try{
-            Mail::to($email)->send(new TicketNotification($registration, $subjectMsg, $msg));
-        }catch(\Exception $e){
-            Log::info("Email Error for {$reference_number}: " . $e->getMessage());
-        }
+//        try{
+//            Mail::to($email)->send(new TicketNotification($registration, $subjectMsg, $msg));
+//        }catch(\Exception $e){
+//            Log::info("Email Error for {$reference_number}: " . $e->getMessage());
+//        }
 
         if(env('APP_ENV') == 'local'){
             $slack = SlackChat::message('#test-reg', ":bangbang: Kuya/Ate *<https://agala.devbroph.com/registered/{$registration->reference_number}|{$registrant->first_name} {$registrant->last_name}>* from *{$registrant->club}* is now registered on our Database, number of guest is *{$guest_count}*, with the reference number: {$registration->reference_number} :bangbang: <!here>");
@@ -213,11 +213,11 @@ class RegistrationController extends Controller
         $msg = "Thank you for your Payment";
         $email = $registration->registrant->email ?: "bagsprin@gmail.com";
 
-        try{
-            Mail::to($email)->send(new PaymentNotification($registration, $subjectMsg, $msg, $payment));
-        }catch(\Exception $e){
-            Log::info("Email Error for {$registration->reference_number}: " . $e->getMessage());
-        }
+//        try{
+//            Mail::to($email)->send(new PaymentNotification($registration, $subjectMsg, $msg, $payment));
+//        }catch(\Exception $e){
+//            Log::info("Email Error for {$registration->reference_number}: " . $e->getMessage());
+//        }
 
         return response()->json($payment, 200);
     }
