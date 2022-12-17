@@ -173,25 +173,8 @@ class AttendanceController extends Controller
 
     public function listOfAttend() 
     {
-        $attendRegistrants = Attendance::join('registrants', 'registrants.id', 'attendances.registrant_id')
-            ->where('status', 'Registrant')
-            ->get();
-        $attendGuest = Attendance::join('registrants', 'registrants.id', 'attendances.registrant_id')
-            ->join('guests', 'guests.id', 'attendances.guest_id')    
-            ->where('status', 'Guest')
-            ->get();
-        $listOfGuest = [];
+        $listOfGuest = Attendance::with(['registrant', 'guest', 'guest.registrant'])->get();
 
-        for ($i = 0; $i < count($attendRegistrants); $i++)
-        {
-            $listOfGuest[] = $attendRegistrants[$i];
-        }
-
-        for ($i = 0; $i < count($attendGuest); $i++)
-        {
-            $listOfGuest[] = $attendGuest[$i];
-        }
-
-        return view('attendance.listOfAttend', compact('listOfGuest'));
+        return view('attendance.listOfAttend', ['listOfGuest' => $listOfGuest]);
     }
 }

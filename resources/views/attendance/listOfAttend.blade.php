@@ -19,31 +19,38 @@
                             </tr>
                         </thead>
                         <tbody>
+                        @php
+//                        dd($listOfGuest)
+                        @endphp
                             @foreach($listOfGuest as $listOfGuest)
-                                <tr>
-                                    <th scope="row">{{ $loop->index+1}}</th>
-                                    <td>
-                                        @if ($listOfGuest->name)
-                                            {{ $listOfGuest->name }}
-                                        @else
-                                            {{ $listOfGuest->first_name }} {{ $listOfGuest->last_name }}
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if ($listOfGuest->name)
-                                            {{ $listOfGuest->club }}
-                                        @else
-                                            {{ $listOfGuest->club }}
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if ($listOfGuest->name)
-                                            {{ $listOfGuest->phone }}
-                                        @else
-                                            {{ $listOfGuest->phone }}
-                                        @endif
-                                    </td>
-                                </tr>
+                                @if($listOfGuest->guest_id)
+                                    <tr>
+                                        <th scope="row">{{ $loop->index+1}}</th>
+                                        <td>
+                                            {{ $listOfGuest->guest->name }}
+                                        </td>
+                                        <td>
+                                            {{ $listOfGuest->guest->registrant->club }}
+                                        </td>
+                                        <td>
+                                            {{ $listOfGuest->registrant->phone }}
+                                        </td>
+                                    </tr>
+                                @elseif($listOfGuest->registrant_id)
+                                    <tr>
+                                        <th scope="row">{{ $loop->index+1}}</th>
+                                        <td>
+                                            {{ $listOfGuest->registrant->first_name }} {{ $listOfGuest->registrant->last_name }}
+                                        </td>
+                                        <td>
+                                            {{ $listOfGuest->registrant->club }}
+                                        </td>
+                                        <td>
+                                            {{ $listOfGuest->registrant->phone }}
+                                        </td>
+                                    </tr>
+                                @endif
+
                             @endforeach
                         </tbody>
                     </table>
