@@ -100,6 +100,11 @@
             @endforeach
         </tbody>
     </table>
+    <div class="row">
+        <div class="col-md-12 text-center py-3">
+            <a href="{{ route('attendance') }}" class="btn btn-primary card-text m-1" id="scan-qr-code">Scan Another</a>
+        </div>
+    </div>
 </div>
 @endsection
 
