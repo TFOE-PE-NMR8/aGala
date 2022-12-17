@@ -10,7 +10,7 @@
         <h4>Registrant Name: {{ $getRegistrant->first_name }} {{ $getRegistrant->last_name }}</h4>
         <h4>Total Amount: ₱   {{ $getRegistrant->total_amount }}</h4>
         <h4>
-          Paid Amount: 
+          Paid Amount:
             @if ($getRegistrant->paid_amount != null)
               ₱ {{ $getRegistrant->paid_amount }}
             @else
@@ -19,7 +19,7 @@
         </h4>
         <h4>Balance Amount: ₱ {{$balance}}</h4>
       </div>
-      
+
 
       <div class="modal-body">
         <table class="table">
@@ -43,7 +43,7 @@
                     </td>
                 </tr> -->
                 @foreach($arrayRegistrantAndGuest as $data)
-                  
+
                 <tr>
                     <th scope="row">{{ $loop->index+1}}</th>
                     <td>
@@ -80,12 +80,12 @@
                           @endphp
                           <!-- <button type="button" class="btn btn-primary btn-attend" data-url="{{ URL::to('/attend/'.$status) }}">Attend</button> -->
                           <form action="{{ URL::to('/attend/'.$status.'/'.$data->id) }}" method="POST">
-                              @csrf 
+                              @csrf
                               @method('POST')
                               <button type="button" class="btn btn-primary btn-attend">
                                 Attend
                               </button>
-                          </form>	   
+                          </form>
                           <!-- <button type="button" class="btn btn-primary btn-attend" data-url="{{ URL::to('/attend/'.$status.'/'.$data->id) }}">
                                 Attend
                           </button> -->
@@ -94,11 +94,11 @@
                                 Attended
                           </button>
                         @endif
-                        
-                      @else 
+
+                      @else
                         <button type="button" class="btn btn-warning">Not Yet Paid</button>
                       @endif
-                        
+
                     </td>
                 </tr>
                 @endforeach
@@ -117,7 +117,7 @@
     $('.btn-attend').click(function(){
 			swal ({
 			    title: "Are you sure?",
-			      text: "Are you sure?",
+			      text: "You won't be able to undo this.",
 			      icon: "warning",
 			      buttons: true,
 			      dangerMode: true,
@@ -141,7 +141,7 @@
     //       $.ajax({
     //           url: url,
     //           success:function(data){
-                
+
     //             swal({
     //               title: "Successfull!",
     //               text: "Thank You For Attending The Event",
@@ -152,6 +152,6 @@
     //       });
 		// 		}
 		// 	})
-     
+
     // });
 </script>
