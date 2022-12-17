@@ -22,7 +22,7 @@ class UserAndRoleTableSeeder extends Seeder
         Role::updateOrCreate(['name' => 'staff']);
 
         $user = User::where('name', 'Admin')->first();
-        if($user) {
+        if(!$user) {
             $admin = User::create([
                 'name' => 'Admin',
                 'email' => 'admin@admin.com',
@@ -34,7 +34,7 @@ class UserAndRoleTableSeeder extends Seeder
         }
 
         $user = User::where('name', 'Manager')->first();
-        if($user) {
+        if(!$user) {
             $manager = User::create([
                 'name' => 'Manager',
                 'email' => 'manager@manager.com',
@@ -47,7 +47,7 @@ class UserAndRoleTableSeeder extends Seeder
         }
 
         $user = User::where('name', 'Staff')->first();
-        if($user) {
+        if(!$user) {
             $manager = User::create([
                 'name' => 'Staff',
                 'email' => 'staff@staff.com',
