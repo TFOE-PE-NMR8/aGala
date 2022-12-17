@@ -74,9 +74,12 @@
 {{--<script src="{!! asset('theme/vendor/php-email-form/validate.js') !!}"></script>--}}
 
 <!-- Template Main JS File -->
-<script src="{!! asset('theme/js/sweetalert.min.js') !!}"></script>
 <script src="{!! asset('theme/js/jquery.min.js') !!}"></script>
 <script src="{!! asset('theme/js/jquery.validate.min.js') !!}"></script>
+<script src="{!! asset('theme/js/jquery-ui.min.js') !!}"></script>
+<script src="{!! asset('theme/js/sweetalert.min.js') !!}"></script>
+<script type="text/javascript" src="{!! asset('theme/js/adapter.min.js') !!}"></script>
+<script type="text/javascript" src="{!! asset('theme/js/instascan.min.js') !!}"></script>
 <script src="{!! asset('theme/js/main.js') !!}"></script>
 @yield('scripts')
 

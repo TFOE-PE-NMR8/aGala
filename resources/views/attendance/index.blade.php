@@ -39,11 +39,6 @@
 @endsection
 
 @section('scripts')
-    <script src="{!! asset('theme/js/jquery-ui.min.js') !!}"></script>
-    <script type="text/javascript" src="{!! asset('theme/js/adapter.min.js') !!}"></script>
-    <script type="text/javascript" src="{!! asset('theme/js/instascan.min.js') !!}"></script>
-
-
     <script>
         $(document).ready(function() {
             $(".card-header").hide();

@@ -57,17 +57,12 @@
 @endsection
 
 @section('scripts')
-    <script script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/3.3.3/adapter.min.js"></script>
-    <script type="text/javascript" src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
-  
- 
+    <link rel="stylesheet" type="text/css" href="{!! asset('theme/vendor/simple-datatables/style.css') !!}">
+    <script src="{!! asset('theme/vendor/simple-datatables/simple-datatables.js') !!}"></script>
+
     <script>
         $(document).ready(function () {
-            $('#example').DataTable();
+            const dataTable = new simpleDatatables.DataTable("#example");
         });
     </script>
 @endsection
