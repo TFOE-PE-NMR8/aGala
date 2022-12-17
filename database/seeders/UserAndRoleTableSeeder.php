@@ -17,13 +17,11 @@ class UserAndRoleTableSeeder extends Seeder
      */
     public function run()
     {
-        $adminRole = Role::create(['name' => 'admin']); 
-        
-        $managerRole = Role::create(['name' => 'manager']);
+        Role::updateOrCreate(['name' => 'admin']);
+        Role::updateOrCreate(['name' => 'manager']);
+        Role::updateOrCreate(['name' => 'staff']);
 
-        $managerRole = Role::create(['name' => 'staff']);
-        
-        $admin = User::create([ 
+        $admin = User::updateOrCreate([
             'name' => 'Admin',
             'email' => 'admin@admin.com',
             'email_verified_at' => now(),
@@ -32,7 +30,7 @@ class UserAndRoleTableSeeder extends Seeder
         ]);
         $admin->assignRole('admin');
 
-        $manager = User::create([ 
+        $manager = User::updateOrCreate([
             'name' => 'Manager',
             'email' => 'manager@manager.com',
             'email_verified_at' => now(),
@@ -40,9 +38,9 @@ class UserAndRoleTableSeeder extends Seeder
             'remember_token' => Str::random(10),
         ]);
 
-        $manager->assignRole('manager'); 
+        $manager->assignRole('manager');
 
-        $manager = User::create([ 
+        $manager = User::updateOrCreate([
             'name' => 'Staff',
             'email' => 'staff@staff.com',
             'email_verified_at' => now(),
@@ -50,6 +48,6 @@ class UserAndRoleTableSeeder extends Seeder
             'remember_token' => Str::random(10),
         ]);
 
-        $manager->assignRole('manager'); 
+        $manager->assignRole('manager');
     }
 }
