@@ -74,13 +74,13 @@
 {{--<script src="{!! asset('theme/vendor/php-email-form/validate.js') !!}"></script>--}}
 
 <!-- Template Main JS File -->
+<script src="{!! asset('theme/js/sweetalert.min.js') !!}"></script>
+<script src="{!! asset('theme/js/jquery.min.js') !!}"></script>
+<script src="{!! asset('theme/js/jquery.validate.min.js') !!}"></script>
 <script src="{!! asset('theme/js/main.js') !!}"></script>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
-
 @yield('scripts')
 
-<script type="text/javascript">      
+<script type="text/javascript">
     var success = "{{ Session::get('success') }}";
     if (success) {
         swal ({

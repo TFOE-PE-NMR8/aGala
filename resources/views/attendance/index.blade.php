@@ -24,7 +24,7 @@
         <button type="submit" class="btn btn-success search_qr">Search</button>
     </div>
   </div>
-  
+
   <div class="card-body">
     <!-- <h5 class="card-title">Special title treatment</h5>
     <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> -->
@@ -39,17 +39,15 @@
 @endsection
 
 @section('scripts')
-    <script script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/3.3.3/adapter.min.js"></script>
-    <script type="text/javascript" src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+    <script src="{!! asset('theme/js/jquery-ui.min.js') !!}"></script>
+{{--    <script type="text/javascript" src="{!! asset('theme/js/adapter.min.js') !!}"></script>--}}
+    <script type="text/javascript" src="{!! asset('theme/js/instascan.min.js') !!}"></script>
 
 
     <script>
         $(document).ready(function() {
             $(".card-header").hide();
             $(".ref-num").hide();
-        });
 
         var value = "";
         $("#scan-qr-code").click(function(){
@@ -62,12 +60,14 @@
                     backgroundScan: true,
                     refractoryPeriod: 10000,
                 });
-            
+
             Instascan.Camera.getCameras().then(function(cameras){
-                    
-                    if(cameras.length >0 ){
+
+                    if(cameras.length > 1 ) {
                         scanner.start(cameras[1]);
-                        
+                    }
+                    else if(cameras.length === 1 ){
+                        scanner.start(cameras[0]);
                     } else{
                         alert('No cameras found');
                     }
@@ -75,7 +75,7 @@
                 }).catch(function(e) {
                     console.error(e);
                 });
-                
+
 
                 scanner.addListener('scan',function(c){
                     value = c;
@@ -136,8 +136,9 @@
                 // });
             }
         });
-        
-        
+
+        });
+
     </script>
 
 
@@ -145,4 +146,4 @@
 
 
 
-    
+
